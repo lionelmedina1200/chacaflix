@@ -321,10 +321,20 @@ function ClassPlayer({ ytId, rawUrl, title }) {
   useEffect(() => {
     if (!ytId || !apiReady || !ytContainerRef.current) return;
     ytPlayerRef.current = new window.YT.Player(ytContainerRef.current, {
+      width: "100%",
+      height: "100%",
       videoId: ytId,
-      playerVars: { controls: 0, disablekb: 1, rel: 0, modestbranding: 1, iv_load_policy: 3, playsinline: 1 },
+      playerVars: { controls: 0, disablekb: 1, rel: 0, modestbranding: 1, iv_load_policy: 3, playsinline: 1, mute: 1, autoplay: 1 },
       events: {
-        onReady: (e) => { playerLoadedRef.current = true; setDuration(e.target.getDuration()); e.target.playVideo(); },
+        onReady: (e) => {
+          playerLoadedRef.current = true;
+          setDuration(e.target.getDuration());
+          // arranca silenciado para esquivar el bloqueo de autoplay de los navegadores;
+          // el botón de volumen deja reactivar el sonido en cualquier momento
+          e.target.mute();
+          setMuted(true);
+          e.target.playVideo();
+        },
         onStateChange: (e) => setIsPlaying(e.data === window.YT.PlayerState.PLAYING),
         onError: (e) => {
           // 101/150 = el dueño del video desactivó la reproducción embebida
@@ -467,7 +477,7 @@ function ClassPlayer({ ytId, rawUrl, title }) {
       }
     >
       {ytId ? (
-        <div ref={ytContainerRef} style={{ position: "absolute", inset: 0, filter: `brightness(${brightness})` }} />
+        <div ref={ytContainerRef} className="yt-fill" style={{ position: "absolute", inset: 0, filter: `brightness(${brightness})` }} />
       ) : (
         <video
           ref={videoRef}
@@ -677,6 +687,7 @@ export default function ChacaFlix() {
         .player-range { -webkit-appearance: none; appearance: none; height: 4px; border-radius: 2px; background: rgba(255,255,255,0.3); outline: none; cursor: pointer; }
         .player-range::-webkit-slider-thumb { -webkit-appearance: none; width: 12px; height: 12px; border-radius: 50%; background: #fff; cursor: pointer; }
         .player-range::-moz-range-thumb { width: 12px; height: 12px; border-radius: 50%; background: #fff; border: none; cursor: pointer; }
+        .yt-fill, .yt-fill iframe { position: absolute !important; inset: 0 !important; width: 100% !important; height: 100% !important; border: 0 !important; }
       `}</style>
 
       {/* NAVBAR */}
