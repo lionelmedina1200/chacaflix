@@ -1,8 +1,9 @@
 import { useState, useEffect, useRef } from "react";
 import {
-  Play, Info, ChevronLeft, ChevronRight, Search, Bell, ChevronDown,
+  Play, Pause, Info, ChevronLeft, ChevronRight, Search, Bell, ChevronDown,
   X, Plus, ThumbsUp, Calculator, FlaskConical,
-  Landmark, BookOpen, Leaf, Palette, Dumbbell, Atom, Check
+  Landmark, BookOpen, Leaf, Palette, Dumbbell, Atom, Check,
+  Rewind, FastForward, Volume2, VolumeX, Sun, Maximize, Minimize
 } from "lucide-react";
 
 /* ============================================================
@@ -19,11 +20,11 @@ const SUBJECTS = [
     color: "#2E86FF",
     icon: Calculator,
     classes: [
-      { id: "m1", title: "Ecuaciones lineales", prof: "Prof. García", duration: "38 min", desc: "Resolución de ecuaciones de primer grado con una incógnita, con ejercicios guiados paso a paso.", videoUrl: null },
-      { id: "m2", title: "Sistemas de ecuaciones", prof: "Prof. García", duration: "45 min", desc: "Métodos de sustitución, igualación y suma-resta para resolver sistemas 2x2.", videoUrl: null },
-      { id: "m3", title: "Función cuadrática", prof: "Prof. García", duration: "41 min", desc: "Gráfico de la parábola, vértice, raíces y su interpretación en problemas reales.", videoUrl: null },
-      { id: "m4", title: "Teorema de Pitágoras", prof: "Prof. Ibáñez", duration: "35 min", desc: "Demostración clásica y aplicación en triángulos rectángulos.", videoUrl: null },
-      { id: "m5", title: "Probabilidad básica", prof: "Prof. Ibáñez", duration: "29 min", desc: "Espacio muestral, sucesos y cálculo de probabilidades simples.", videoUrl: null },
+      { id: "m1", title: "Ecuaciones lineales", prof: "Prof. García", duration: "38 min", desc: "Resolución de ecuaciones de primer grado con una incógnita, con ejercicios guiados paso a paso.", videoUrl: "https://youtu.be/h3_GcxDq5h4" },
+      { id: "m2", title: "Sistemas de ecuaciones", prof: "Prof. García", duration: "45 min", desc: "Métodos de sustitución, igualación y suma-resta para resolver sistemas 2x2.", videoUrl: "https://youtu.be/_IWs9s3XdOA" },
+      { id: "m3", title: "Función cuadrática", prof: "Prof. García", duration: "41 min", desc: "Gráfico de la parábola, vértice, raíces y su interpretación en problemas reales.", videoUrl: "https://youtu.be/7pUi5lvLf7c" },
+      { id: "m4", title: "Teorema de Pitágoras", prof: "Prof. Ibáñez", duration: "35 min", desc: "Demostración clásica y aplicación en triángulos rectángulos.", videoUrl: "https://youtu.be/_IWs9s3XdOA" },
+      { id: "m5", title: "Probabilidad básica", prof: "Prof. Ibáñez", duration: "29 min", desc: "Espacio muestral, sucesos y cálculo de probabilidades simples.", videoUrl: "https://youtu.be/LWRcpMfUCUE" },
       { id: "m6", title: "Introducción a derivadas", prof: "Prof. García", duration: "50 min", desc: "Concepto de límite y tasa de cambio como puerta de entrada al cálculo.", videoUrl: null },
     ],
   },
@@ -46,10 +47,10 @@ const SUBJECTS = [
     color: "#22C55E",
     icon: FlaskConical,
     classes: [
-      { id: "q1", title: "Tabla periódica", prof: "Prof. Funes", duration: "36 min", desc: "Organización de los elementos, grupos, períodos y propiedades periódicas.", videoUrl: null },
-      { id: "q2", title: "Enlace químico", prof: "Prof. Funes", duration: "40 min", desc: "Enlace iónico, covalente y metálico explicados con modelos moleculares.", videoUrl: null },
-      { id: "q3", title: "Reacciones químicas", prof: "Prof. Domínguez", duration: "37 min", desc: "Tipos de reacciones y balanceo de ecuaciones químicas.", videoUrl: null },
-      { id: "q4", title: "Ácidos y bases", prof: "Prof. Domínguez", duration: "31 min", desc: "Escala de pH y reacciones de neutralización con ejemplos de laboratorio.", videoUrl: null },
+      { id: "q1", title: "Tabla periódica", prof: "Prof. Funes", duration: "36 min", desc: "Organización de los elementos, grupos, períodos y propiedades periódicas.", videoUrl: "https://youtu.be/9B3UHUVziIE" },
+      { id: "q2", title: "Enlace químico", prof: "Prof. Funes", duration: "40 min", desc: "Enlace iónico, covalente y metálico explicados con modelos moleculares.", videoUrl: "https://youtu.be/t_kbksviWx8" },
+      { id: "q3", title: "Reacciones químicas", prof: "Prof. Domínguez", duration: "37 min", desc: "Tipos de reacciones y balanceo de ecuaciones químicas.", videoUrl: "https://youtu.be/4B_719zRWL8" },
+      { id: "q4", title: "Ácidos y bases", prof: "Prof. Domínguez", duration: "31 min", desc: "Escala de pH y reacciones de neutralización con ejemplos de laboratorio.", videoUrl: "https://youtu.be/jIbnc0j_ihk" },
     ],
   },
   {
@@ -58,10 +59,10 @@ const SUBJECTS = [
     color: "#C9A227",
     icon: Landmark,
     classes: [
-      { id: "h1", title: "Revolución de Mayo", prof: "Prof. Castro", duration: "48 min", desc: "Contexto, causas y consecuencias de la Semana de Mayo de 1810.", videoUrl: null },
-      { id: "h2", title: "Independencia argentina", prof: "Prof. Castro", duration: "46 min", desc: "El proceso hacia la Declaración de la Independencia en 1816.", videoUrl: null },
-      { id: "h3", title: "Primera Guerra Mundial", prof: "Prof. Núñez", duration: "52 min", desc: "Causas, alianzas y consecuencias del conflicto de 1914-1918.", videoUrl: null },
-      { id: "h4", title: "Revolución Industrial", prof: "Prof. Núñez", duration: "44 min", desc: "Transformaciones económicas y sociales entre los siglos XVIII y XIX.", videoUrl: null },
+      { id: "h1", title: "Revolución de Mayo", prof: "Prof. Castro", duration: "48 min", desc: "Contexto, causas y consecuencias de la Semana de Mayo de 1810.", videoUrl: "https://youtu.be/99I8tt5ZwKE" },
+      { id: "h2", title: "Independencia argentina", prof: "Prof. Castro", duration: "46 min", desc: "El proceso hacia la Declaración de la Independencia en 1816.", videoUrl: "https://youtu.be/kQWWCI_Wd_8" },
+      { id: "h3", title: "Primera Guerra Mundial", prof: "Prof. Núñez", duration: "52 min", desc: "Causas, alianzas y consecuencias del conflicto de 1914-1918.", videoUrl: "https://youtu.be/S8QavHAduhA" },
+      { id: "h4", title: "Revolución Industrial", prof: "Prof. Núñez", duration: "44 min", desc: "Transformaciones económicas y sociales entre los siglos XVIII y XIX.", videoUrl: "https://youtu.be/1Li2W2XjV6I" },
     ],
   },
   {
@@ -264,6 +265,220 @@ function Row({ title, items, onOpen }) {
   );
 }
 
+// Carga la API de YouTube una sola vez (la reutiliza si ya está cargada)
+function useYouTubeAPI() {
+  const [ready, setReady] = useState(!!(window.YT && window.YT.Player));
+  useEffect(() => {
+    if (window.YT && window.YT.Player) { setReady(true); return; }
+    if (!document.getElementById("youtube-iframe-api")) {
+      const tag = document.createElement("script");
+      tag.id = "youtube-iframe-api";
+      tag.src = "https://www.youtube.com/iframe_api";
+      document.body.appendChild(tag);
+    }
+    const prev = window.onYouTubeIframeAPIReady;
+    window.onYouTubeIframeAPIReady = () => { if (prev) prev(); setReady(true); };
+  }, []);
+  return ready;
+}
+
+function fmtTime(s) {
+  if (!isFinite(s) || s < 0) return "0:00";
+  const m = Math.floor(s / 60);
+  const sec = Math.floor(s % 60);
+  return `${m}:${sec.toString().padStart(2, "0")}`;
+}
+
+const iconBtnStyle = { background: "transparent", border: "none", cursor: "pointer", color: "#fff", display: "flex", alignItems: "center", padding: 4 };
+
+/* ============================================================
+   REPRODUCTOR PROPIO — controles estilo Netflix
+   Funciona tanto con videos de YouTube (usa la API oficial y
+   oculta los controles nativos de YouTube) como con un link de
+   video directo (usa la etiqueta <video> normal de HTML).
+   ============================================================ */
+function ClassPlayer({ ytId, rawUrl, title }) {
+  const apiReady = useYouTubeAPI();
+  const ytContainerRef = useRef(null);
+  const ytPlayerRef = useRef(null);
+  const videoRef = useRef(null);
+  const wrapperRef = useRef(null);
+  const hideTimer = useRef(null);
+
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [current, setCurrent] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const [volume, setVolume] = useState(100);
+  const [muted, setMuted] = useState(false);
+  const [brightness, setBrightness] = useState(1);
+  const [showControls, setShowControls] = useState(true);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+
+  // --- inicialización del player de YouTube ---
+  useEffect(() => {
+    if (!ytId || !apiReady || !ytContainerRef.current) return;
+    ytPlayerRef.current = new window.YT.Player(ytContainerRef.current, {
+      videoId: ytId,
+      playerVars: { controls: 0, disablekb: 1, rel: 0, modestbranding: 1, iv_load_policy: 3, playsinline: 1 },
+      events: {
+        onReady: (e) => { setDuration(e.target.getDuration()); e.target.playVideo(); },
+        onStateChange: (e) => setIsPlaying(e.data === window.YT.PlayerState.PLAYING),
+      },
+    });
+    return () => { ytPlayerRef.current?.destroy?.(); };
+  }, [ytId, apiReady]);
+
+  // --- progreso: YouTube no avisa el tiempo solo, hay que consultarlo ---
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (ytId && ytPlayerRef.current?.getCurrentTime) {
+        setCurrent(ytPlayerRef.current.getCurrentTime());
+        const d = ytPlayerRef.current.getDuration();
+        if (d) setDuration(d);
+      } else if (!ytId && videoRef.current) {
+        setCurrent(videoRef.current.currentTime);
+        setDuration(videoRef.current.duration || 0);
+      }
+    }, 350);
+    return () => clearInterval(interval);
+  }, [ytId]);
+
+  const togglePlay = () => {
+    if (ytId) {
+      if (!ytPlayerRef.current) return;
+      isPlaying ? ytPlayerRef.current.pauseVideo() : ytPlayerRef.current.playVideo();
+    } else if (videoRef.current) {
+      isPlaying ? videoRef.current.pause() : videoRef.current.play();
+      setIsPlaying(!isPlaying);
+    }
+  };
+
+  const skip = (secs) => {
+    const target = Math.max(0, Math.min(current + secs, duration || current + secs));
+    if (ytId) ytPlayerRef.current?.seekTo(target, true);
+    else if (videoRef.current) videoRef.current.currentTime = target;
+    setCurrent(target);
+  };
+
+  const handleSeekClick = (e) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const pct = Math.min(1, Math.max(0, (e.clientX - rect.left) / rect.width));
+    const target = pct * duration;
+    if (ytId) ytPlayerRef.current?.seekTo(target, true);
+    else if (videoRef.current) videoRef.current.currentTime = target;
+    setCurrent(target);
+  };
+
+  const toggleMute = () => {
+    const next = !muted;
+    setMuted(next);
+    if (ytId) next ? ytPlayerRef.current?.mute() : ytPlayerRef.current?.unMute();
+    else if (videoRef.current) videoRef.current.muted = next;
+  };
+
+  const handleVolume = (v) => {
+    setVolume(v);
+    const shouldMute = v === 0;
+    setMuted(shouldMute);
+    if (ytId) { ytPlayerRef.current?.setVolume(v); shouldMute ? ytPlayerRef.current?.mute() : ytPlayerRef.current?.unMute(); }
+    else if (videoRef.current) { videoRef.current.volume = v / 100; videoRef.current.muted = shouldMute; }
+  };
+
+  const toggleFullscreen = () => {
+    if (!wrapperRef.current) return;
+    if (!document.fullscreenElement) { wrapperRef.current.requestFullscreen?.(); setIsFullscreen(true); }
+    else { document.exitFullscreen?.(); setIsFullscreen(false); }
+  };
+
+  const resetHideTimer = () => {
+    setShowControls(true);
+    clearTimeout(hideTimer.current);
+    hideTimer.current = setTimeout(() => setShowControls(false), 3000);
+  };
+  useEffect(() => { resetHideTimer(); return () => clearTimeout(hideTimer.current); }, []);
+
+  const progressPct = duration ? (current / duration) * 100 : 0;
+
+  return (
+    <div
+      ref={wrapperRef}
+      onMouseMove={resetHideTimer}
+      style={{ position: "relative", width: "100%", paddingTop: "56.25%", background: "#000", overflow: "hidden" }}
+    >
+      {ytId ? (
+        <div ref={ytContainerRef} style={{ position: "absolute", inset: 0, filter: `brightness(${brightness})` }} />
+      ) : (
+        <video
+          ref={videoRef}
+          src={rawUrl}
+          autoPlay
+          onPlay={() => setIsPlaying(true)}
+          onPause={() => setIsPlaying(false)}
+          onLoadedMetadata={(e) => setDuration(e.target.duration)}
+          style={{ position: "absolute", inset: 0, width: "100%", height: "100%", filter: `brightness(${brightness})` }}
+        />
+      )}
+
+      {/* capa clickeable sobre el video para togglear play/pausa */}
+      <div onClick={togglePlay} style={{ position: "absolute", inset: 0, cursor: "pointer" }} />
+
+      {/* botón grande de play cuando está pausado */}
+      {!isPlaying && (
+        <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", pointerEvents: "none" }}>
+          <div style={{ width: 60, height: 60, borderRadius: "50%", background: "rgba(0,0,0,0.55)", border: "2px solid rgba(255,255,255,0.8)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <Play size={26} color="#fff" fill="#fff" style={{ marginLeft: 3 }} />
+          </div>
+        </div>
+      )}
+
+      {/* barra de controles inferior */}
+      <div
+        style={{
+          position: "absolute", left: 0, right: 0, bottom: 0, padding: "8px 16px 12px",
+          background: "linear-gradient(to top, rgba(0,0,0,0.9), transparent)",
+          opacity: showControls ? 1 : 0, transition: "opacity 250ms ease",
+          pointerEvents: showControls ? "auto" : "none",
+        }}
+      >
+        <div onClick={handleSeekClick} style={{ height: 5, background: "rgba(255,255,255,0.3)", borderRadius: 3, cursor: "pointer", marginBottom: 10 }}>
+          <div style={{ height: "100%", width: `${progressPct}%`, background: RED, borderRadius: 3, position: "relative" }}>
+            <div style={{ position: "absolute", right: -5, top: -3.5, width: 12, height: 12, borderRadius: "50%", background: RED }} />
+          </div>
+        </div>
+
+        <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
+          <button onClick={togglePlay} style={iconBtnStyle} aria-label={isPlaying ? "Pausar" : "Reproducir"}>
+            {isPlaying ? <Pause size={20} fill="#fff" /> : <Play size={20} fill="#fff" />}
+          </button>
+          <button onClick={() => skip(-10)} style={iconBtnStyle} aria-label="Retroceder 10 segundos">
+            <Rewind size={18} />
+          </button>
+          <button onClick={() => skip(10)} style={iconBtnStyle} aria-label="Adelantar 10 segundos">
+            <FastForward size={18} />
+          </button>
+          <button onClick={toggleMute} style={iconBtnStyle} aria-label={muted ? "Activar sonido" : "Silenciar"}>
+            {muted || volume === 0 ? <VolumeX size={18} /> : <Volume2 size={18} />}
+          </button>
+          <input type="range" min="0" max="100" value={muted ? 0 : volume} onChange={(e) => handleVolume(Number(e.target.value))} className="player-range" style={{ width: 70 }} />
+
+          <span style={{ color: "#ddd", fontSize: 12, minWidth: 92 }}>{fmtTime(current)} / {fmtTime(duration)}</span>
+
+          <div style={{ flex: 1, minWidth: 8 }} />
+
+          <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+            <Sun size={16} />
+            <input type="range" min="0.3" max="1" step="0.05" value={brightness} onChange={(e) => setBrightness(Number(e.target.value))} className="player-range" style={{ width: 70 }} title="Brillo" />
+          </div>
+
+          <button onClick={toggleFullscreen} style={iconBtnStyle} aria-label="Pantalla completa">
+            {isFullscreen ? <Minimize size={18} /> : <Maximize size={18} />}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function Modal({ item, color, Icon, onClose }) {
   if (!item) return null;
   const ytId = getYouTubeId(item.videoUrl);
@@ -317,19 +532,10 @@ function Modal({ item, color, Icon, onClose }) {
             📹 Todavía no cargaste el video de esta clase. Cuando lo subas, agregá la URL en el campo <code style={{ color: "#eee" }}>videoUrl</code> de este item y acá se va a reproducir automáticamente.
           </div>
         )}
-        {item.videoUrl && ytId && (
-          <div style={{ position: "relative", width: "calc(100% - 64px)", margin: "0 32px 28px", paddingTop: "56.25%", borderRadius: 6, overflow: "hidden", background: "#000" }}>
-            <iframe
-              src={`https://www.youtube.com/embed/${ytId}`}
-              title={item.title}
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-              style={{ position: "absolute", inset: 0, width: "100%", height: "100%", border: "none" }}
-            />
+        {item.videoUrl && (
+          <div style={{ margin: "0 32px 28px", borderRadius: 6, overflow: "hidden" }}>
+            <ClassPlayer key={item.id} ytId={ytId} rawUrl={item.videoUrl} title={item.title} />
           </div>
-        )}
-        {item.videoUrl && !ytId && (
-          <video controls src={item.videoUrl} style={{ width: "calc(100% - 64px)", margin: "0 32px 28px", borderRadius: 6 }} />
         )}
       </div>
     </div>
@@ -373,6 +579,9 @@ export default function ChacaFlix() {
         @keyframes heroFade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
         .hero-fade { animation: heroFade 800ms ease; }
         @media (prefers-reduced-motion: reduce) { .hero-fade { animation: none; } }
+        .player-range { -webkit-appearance: none; appearance: none; height: 4px; border-radius: 2px; background: rgba(255,255,255,0.3); outline: none; cursor: pointer; }
+        .player-range::-webkit-slider-thumb { -webkit-appearance: none; width: 12px; height: 12px; border-radius: 50%; background: #fff; cursor: pointer; }
+        .player-range::-moz-range-thumb { width: 12px; height: 12px; border-radius: 50%; background: #fff; border: none; cursor: pointer; }
       `}</style>
 
       {/* NAVBAR */}
