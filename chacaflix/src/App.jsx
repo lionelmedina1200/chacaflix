@@ -22,7 +22,7 @@ const SUBJECTS = [
     classes: [
       { id: "m1", title: "Ecuaciones lineales", prof: "Prof. García", duration: "38 min", desc: "Resolución de ecuaciones de primer grado con una incógnita, con ejercicios guiados paso a paso.", videoUrl: "https://youtu.be/h3_GcxDq5h4" },
       { id: "m2", title: "Sistemas de ecuaciones", prof: "Prof. García", duration: "45 min", desc: "Métodos de sustitución, igualación y suma-resta para resolver sistemas 2x2.", videoUrl: "https://youtu.be/_IWs9s3XdOA" },
-      { id: "m3", title: "Función cuadrática", prof: "Prof. García", duration: "41 min", desc: "Gráfico de la parábola, vértice, raíces y su interpretación en problemas reales.", videoUrl: "https://youtu.be/7pUi5lvLf7c" },
+      { id: "m3", title: "Razones trigonométricas", prof: "Prof. García", duration: "41 min", desc: "Qué son el seno, coseno y tangente, y cómo se calculan en un triángulo rectángulo.", videoUrl: "https://youtu.be/7pUi5lvLf7c" },
       { id: "m4", title: "Teorema de Pitágoras", prof: "Prof. Ibáñez", duration: "35 min", desc: "Demostración clásica y aplicación en triángulos rectángulos.", videoUrl: "https://youtu.be/_IWs9s3XdOA" },
       { id: "m5", title: "Probabilidad básica", prof: "Prof. Ibáñez", duration: "29 min", desc: "Espacio muestral, sucesos y cálculo de probabilidades simples.", videoUrl: "https://youtu.be/LWRcpMfUCUE" },
       { id: "m6", title: "Introducción a derivadas", prof: "Prof. García", duration: "50 min", desc: "Concepto de límite y tasa de cambio como puerta de entrada al cálculo.", videoUrl: null },
@@ -59,7 +59,7 @@ const SUBJECTS = [
     color: "#C9A227",
     icon: Landmark,
     classes: [
-      { id: "h1", title: "Revolución de Mayo", prof: "Prof. Castro", duration: "48 min", desc: "Contexto, causas y consecuencias de la Semana de Mayo de 1810.", videoUrl: "https://youtu.be/99I8tt5ZwKE" },
+      { id: "h1", title: "Historia de las civilizaciones", prof: "Prof. Castro", duration: "48 min", desc: "Documental recorriendo la historia humana: Edad Antigua, Edad Media y Edad Moderna.", videoUrl: "https://youtu.be/99I8tt5ZwKE" },
       { id: "h2", title: "Independencia argentina", prof: "Prof. Castro", duration: "46 min", desc: "El proceso hacia la Declaración de la Independencia en 1816.", videoUrl: "https://youtu.be/kQWWCI_Wd_8" },
       { id: "h3", title: "Primera Guerra Mundial", prof: "Prof. Núñez", duration: "52 min", desc: "Causas, alianzas y consecuencias del conflicto de 1914-1918.", videoUrl: "https://youtu.be/S8QavHAduhA" },
       { id: "h4", title: "Revolución Industrial", prof: "Prof. Núñez", duration: "44 min", desc: "Transformaciones económicas y sociales entre los siglos XVIII y XIX.", videoUrl: "https://youtu.be/1Li2W2XjV6I" },
@@ -110,12 +110,13 @@ const SUBJECTS = [
   },
 ];
 
-// Clases con progreso (para la fila "Seguir viendo")
+// Clases para la fila "Seguir viendo". El progreso (barra roja) solo se muestra
+// cuando hay datos reales de visualización; por ahora no hay ninguno cargado.
 const CONTINUE_WATCHING = [
-  { ...SUBJECTS[1].classes[0], subjectColor: SUBJECTS[1].color, subjectName: SUBJECTS[1].name, icon: SUBJECTS[1].icon, progress: 62 },
-  { ...SUBJECTS[0].classes[2], subjectColor: SUBJECTS[0].color, subjectName: SUBJECTS[0].name, icon: SUBJECTS[0].icon, progress: 30 },
-  { ...SUBJECTS[3].classes[1], subjectColor: SUBJECTS[3].color, subjectName: SUBJECTS[3].name, icon: SUBJECTS[3].icon, progress: 85 },
-  { ...SUBJECTS[5].classes[0], subjectColor: SUBJECTS[5].color, subjectName: SUBJECTS[5].name, icon: SUBJECTS[5].icon, progress: 15 },
+  { ...SUBJECTS[1].classes[0], subjectColor: SUBJECTS[1].color, subjectName: SUBJECTS[1].name, icon: SUBJECTS[1].icon },
+  { ...SUBJECTS[0].classes[2], subjectColor: SUBJECTS[0].color, subjectName: SUBJECTS[0].name, icon: SUBJECTS[0].icon },
+  { ...SUBJECTS[3].classes[1], subjectColor: SUBJECTS[3].color, subjectName: SUBJECTS[3].name, icon: SUBJECTS[3].icon },
+  { ...SUBJECTS[5].classes[0], subjectColor: SUBJECTS[5].color, subjectName: SUBJECTS[5].name, icon: SUBJECTS[5].icon },
 ];
 
 // Pool de clases destacadas que rotan en el hero cada 5 segundos.
@@ -397,7 +398,25 @@ function ClassPlayer({ ytId, rawUrl, title }) {
   };
   useEffect(() => { resetHideTimer(); return () => clearTimeout(hideTimer.current); }, []);
 
+  // mantiene el estado sincronizado si el usuario sale de pantalla completa con ESC
+  useEffect(() => {
+    const onFsChange = () => setIsFullscreen(!!document.fullscreenElement);
+    document.addEventListener("fullscreenchange", onFsChange);
+    return () => document.removeEventListener("fullscreenchange", onFsChange);
+  }, []);
+
   const progressPct = duration ? (current / duration) * 100 : 0;
+
+  // en pantalla completa los controles se agrandan para que no se vean diminutos
+  const iconSize = isFullscreen ? 28 : 18;
+  const bigIconSize = isFullscreen ? 20 : 20;
+  const centralPlaySize = isFullscreen ? 100 : 60;
+  const centralPlayIcon = isFullscreen ? 40 : 26;
+  const barPadding = isFullscreen ? "18px 34px 28px" : "8px 16px 12px";
+  const sliderWidth = isFullscreen ? 120 : 70;
+  const timeFontSize = isFullscreen ? 16 : 12;
+  const progressBarHeight = isFullscreen ? 7 : 5;
+  const controlsGap = isFullscreen ? 22 : 12;
 
   return (
     <div
@@ -425,8 +444,8 @@ function ClassPlayer({ ytId, rawUrl, title }) {
       {/* botón grande de play cuando está pausado */}
       {!isPlaying && (
         <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", pointerEvents: "none" }}>
-          <div style={{ width: 60, height: 60, borderRadius: "50%", background: "rgba(0,0,0,0.55)", border: "2px solid rgba(255,255,255,0.8)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <Play size={26} color="#fff" fill="#fff" style={{ marginLeft: 3 }} />
+          <div style={{ width: centralPlaySize, height: centralPlaySize, borderRadius: "50%", background: "rgba(0,0,0,0.55)", border: "2px solid rgba(255,255,255,0.8)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <Play size={centralPlayIcon} color="#fff" fill="#fff" style={{ marginLeft: 3 }} />
           </div>
         </div>
       )}
@@ -434,44 +453,44 @@ function ClassPlayer({ ytId, rawUrl, title }) {
       {/* barra de controles inferior */}
       <div
         style={{
-          position: "absolute", left: 0, right: 0, bottom: 0, padding: "8px 16px 12px",
+          position: "absolute", left: 0, right: 0, bottom: 0, padding: barPadding,
           background: "linear-gradient(to top, rgba(0,0,0,0.9), transparent)",
           opacity: showControls ? 1 : 0, transition: "opacity 250ms ease",
           pointerEvents: showControls ? "auto" : "none",
         }}
       >
-        <div onClick={handleSeekClick} style={{ height: 5, background: "rgba(255,255,255,0.3)", borderRadius: 3, cursor: "pointer", marginBottom: 10 }}>
+        <div onClick={handleSeekClick} style={{ height: progressBarHeight, background: "rgba(255,255,255,0.3)", borderRadius: 3, cursor: "pointer", marginBottom: 10 }}>
           <div style={{ height: "100%", width: `${progressPct}%`, background: RED, borderRadius: 3, position: "relative" }}>
-            <div style={{ position: "absolute", right: -5, top: -3.5, width: 12, height: 12, borderRadius: "50%", background: RED }} />
+            <div style={{ position: "absolute", right: -5, top: (progressBarHeight - 12) / 2, width: 12, height: 12, borderRadius: "50%", background: RED }} />
           </div>
         </div>
 
-        <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: controlsGap, flexWrap: "wrap" }}>
           <button onClick={togglePlay} style={iconBtnStyle} aria-label={isPlaying ? "Pausar" : "Reproducir"}>
-            {isPlaying ? <Pause size={20} fill="#fff" /> : <Play size={20} fill="#fff" />}
+            {isPlaying ? <Pause size={iconSize} fill="#fff" /> : <Play size={iconSize} fill="#fff" />}
           </button>
           <button onClick={() => skip(-10)} style={iconBtnStyle} aria-label="Retroceder 10 segundos">
-            <Rewind size={18} />
+            <Rewind size={iconSize} />
           </button>
           <button onClick={() => skip(10)} style={iconBtnStyle} aria-label="Adelantar 10 segundos">
-            <FastForward size={18} />
+            <FastForward size={iconSize} />
           </button>
           <button onClick={toggleMute} style={iconBtnStyle} aria-label={muted ? "Activar sonido" : "Silenciar"}>
-            {muted || volume === 0 ? <VolumeX size={18} /> : <Volume2 size={18} />}
+            {muted || volume === 0 ? <VolumeX size={iconSize} /> : <Volume2 size={iconSize} />}
           </button>
-          <input type="range" min="0" max="100" value={muted ? 0 : volume} onChange={(e) => handleVolume(Number(e.target.value))} className="player-range" style={{ width: 70 }} />
+          <input type="range" min="0" max="100" value={muted ? 0 : volume} onChange={(e) => handleVolume(Number(e.target.value))} className="player-range" style={{ width: sliderWidth }} />
 
-          <span style={{ color: "#ddd", fontSize: 12, minWidth: 92 }}>{fmtTime(current)} / {fmtTime(duration)}</span>
+          <span style={{ color: "#ddd", fontSize: timeFontSize, minWidth: sliderWidth + 22 }}>{fmtTime(current)} / {fmtTime(duration)}</span>
 
           <div style={{ flex: 1, minWidth: 8 }} />
 
           <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-            <Sun size={16} />
-            <input type="range" min="0.3" max="1" step="0.05" value={brightness} onChange={(e) => setBrightness(Number(e.target.value))} className="player-range" style={{ width: 70 }} title="Brillo" />
+            <Sun size={iconSize} />
+            <input type="range" min="0.3" max="1" step="0.05" value={brightness} onChange={(e) => setBrightness(Number(e.target.value))} className="player-range" style={{ width: sliderWidth }} title="Brillo" />
           </div>
 
           <button onClick={toggleFullscreen} style={iconBtnStyle} aria-label="Pantalla completa">
-            {isFullscreen ? <Minimize size={18} /> : <Maximize size={18} />}
+            {isFullscreen ? <Minimize size={iconSize} /> : <Maximize size={iconSize} />}
           </button>
         </div>
       </div>
@@ -479,9 +498,35 @@ function ClassPlayer({ ytId, rawUrl, title }) {
   );
 }
 
+// Guarda "Mi lista" y "Me gusta" en el navegador del alumno, para que persista entre visitas
+function readIdList(key) {
+  try { return JSON.parse(localStorage.getItem(key) || "[]"); } catch { return []; }
+}
+function writeIdList(key, list) {
+  try { localStorage.setItem(key, JSON.stringify(list)); } catch {}
+}
+
 function Modal({ item, color, Icon, onClose }) {
+  const [myList, setMyList] = useState(() => readIdList("chacaflix_my_list"));
+  const [liked, setLiked] = useState(() => readIdList("chacaflix_liked"));
   if (!item) return null;
   const ytId = getYouTubeId(item.videoUrl);
+
+  const inMyList = myList.includes(item.id);
+  const isLiked = liked.includes(item.id);
+  const toggleMyList = () => {
+    const next = inMyList ? myList.filter((id) => id !== item.id) : [...myList, item.id];
+    setMyList(next);
+    writeIdList("chacaflix_my_list", next);
+  };
+  const toggleLiked = () => {
+    const next = isLiked ? liked.filter((id) => id !== item.id) : [...liked, item.id];
+    setLiked(next);
+    writeIdList("chacaflix_liked", next);
+  };
+
+  const pillBtn = { background: "rgba(120,120,120,0.4)", border: "2px solid rgba(255,255,255,0.5)", borderRadius: "50%", width: 40, height: 40, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" };
+
   return (
     <div
       onClick={onClose}
@@ -494,27 +539,39 @@ function Modal({ item, color, Icon, onClose }) {
         onClick={(e) => e.stopPropagation()}
         style={{ background: "#181818", width: "min(760px, 100%)", borderRadius: 8, overflow: "hidden", maxHeight: "88vh", overflowY: "auto" }}
       >
-        <div style={{ position: "relative", height: 320, background: `linear-gradient(160deg, ${color}CC, ${BG})` }}>
-          <Icon size={140} color="rgba(255,255,255,0.15)" style={{ position: "absolute", right: 20, top: 20 }} />
-          <button onClick={onClose} style={{ position: "absolute", top: 16, right: 16, background: "#181818", border: "none", borderRadius: "50%", width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
+        {/* CABECERA: el reproductor real si hay video, o un aviso si todavía no se cargó */}
+        <div style={{ position: "relative" }}>
+          {item.videoUrl ? (
+            <ClassPlayer key={item.id} ytId={ytId} rawUrl={item.videoUrl} title={item.title} />
+          ) : (
+            <div style={{ position: "relative", height: 320, background: `linear-gradient(160deg, ${color}CC, ${BG})` }}>
+              <Icon size={140} color="rgba(255,255,255,0.15)" style={{ position: "absolute", right: 20, top: 20 }} />
+              <div style={{ position: "absolute", bottom: 24, left: 32, right: 32 }}>
+                <div style={{ fontFamily: "Helvetica Neue, Arial, sans-serif", fontWeight: 800, fontSize: 34, color: "#fff", letterSpacing: "-0.5px" }}>{item.title}</div>
+                <div style={{ marginTop: 8, color: "#ffd166", fontSize: 13, fontWeight: 600 }}>📹 Video próximamente</div>
+              </div>
+            </div>
+          )}
+          <button onClick={onClose} style={{ position: "absolute", top: 16, right: 16, zIndex: 5, background: "#181818", border: "none", borderRadius: "50%", width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
             <X size={18} color="#fff" />
           </button>
-          <div style={{ position: "absolute", bottom: 24, left: 32, right: 32 }}>
-            <div style={{ fontFamily: "Helvetica Neue, Arial, sans-serif", fontWeight: 800, fontSize: 34, color: "#fff", letterSpacing: "-0.5px" }}>{item.title}</div>
-            <div style={{ display: "flex", gap: 12, marginTop: 14 }}>
-              <button style={{ background: "#fff", border: "none", borderRadius: 4, padding: "10px 22px", display: "flex", alignItems: "center", gap: 8, fontWeight: 700, cursor: "pointer" }}>
-                <Play size={18} fill="#000" /> Reproducir
-              </button>
-              <button style={{ background: "rgba(120,120,120,0.4)", border: "2px solid rgba(255,255,255,0.5)", borderRadius: "50%", width: 40, height: 40, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
-                <Plus size={18} color="#fff" />
-              </button>
-              <button style={{ background: "rgba(120,120,120,0.4)", border: "2px solid rgba(255,255,255,0.5)", borderRadius: "50%", width: 40, height: 40, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
-                <ThumbsUp size={16} color="#fff" />
-              </button>
-            </div>
+        </div>
+
+        <div style={{ padding: "20px 32px 0" }}>
+          {item.videoUrl && (
+            <div style={{ fontFamily: "Helvetica Neue, Arial, sans-serif", fontWeight: 800, fontSize: 26, color: "#fff", letterSpacing: "-0.5px" }}>{item.title}</div>
+          )}
+          <div style={{ display: "flex", gap: 12, marginTop: item.videoUrl ? 14 : 0, marginBottom: 6 }}>
+            <button onClick={toggleMyList} style={pillBtn} aria-label={inMyList ? "Quitar de mi lista" : "Agregar a mi lista"} title={inMyList ? "En tu lista" : "Agregar a mi lista"}>
+              {inMyList ? <Check size={18} color="#4ADE80" /> : <Plus size={18} color="#fff" />}
+            </button>
+            <button onClick={toggleLiked} style={pillBtn} aria-label={isLiked ? "Quitar me gusta" : "Me gusta"} title="Me gusta">
+              <ThumbsUp size={16} color={isLiked ? RED : "#fff"} fill={isLiked ? RED : "none"} />
+            </button>
           </div>
         </div>
-        <div style={{ padding: "24px 32px 32px", display: "flex", gap: 24 }}>
+
+        <div style={{ padding: "16px 32px 32px", display: "flex", gap: 24 }}>
           <div style={{ flex: 1 }}>
             <div style={{ display: "flex", gap: 10, color: TEXT_MUTED, fontSize: 13, marginBottom: 10 }}>
               <span style={{ color: "#4ADE80", fontWeight: 700 }}>{item.subjectName || "Materia"}</span>
@@ -527,14 +584,10 @@ function Modal({ item, color, Icon, onClose }) {
             <div style={{ marginBottom: 6 }}><span style={{ color: "#777" }}>Profesor/a: </span><span style={{ color: "#fff" }}>{item.prof}</span></div>
           </div>
         </div>
+
         {!item.videoUrl && (
           <div style={{ margin: "0 32px 28px", padding: 16, border: "1px dashed #444", borderRadius: 6, color: TEXT_MUTED, fontSize: 13 }}>
             📹 Todavía no cargaste el video de esta clase. Cuando lo subas, agregá la URL en el campo <code style={{ color: "#eee" }}>videoUrl</code> de este item y acá se va a reproducir automáticamente.
-          </div>
-        )}
-        {item.videoUrl && (
-          <div style={{ margin: "0 32px 28px", borderRadius: 6, overflow: "hidden" }}>
-            <ClassPlayer key={item.id} ytId={ytId} rawUrl={item.videoUrl} title={item.title} />
           </div>
         )}
       </div>
