@@ -314,6 +314,8 @@ function ClassPlayer({ ytId, rawUrl, title }) {
   const [brightness, setBrightness] = useState(1);
   const [showControls, setShowControls] = useState(true);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [playerError, setPlayerError] = useState(null);
+  const playerLoadedRef = useRef(false);
 
   // --- inicialización del player de YouTube ---
   useEffect(() => {
@@ -322,12 +324,24 @@ function ClassPlayer({ ytId, rawUrl, title }) {
       videoId: ytId,
       playerVars: { controls: 0, disablekb: 1, rel: 0, modestbranding: 1, iv_load_policy: 3, playsinline: 1 },
       events: {
-        onReady: (e) => { setDuration(e.target.getDuration()); e.target.playVideo(); },
+        onReady: (e) => { playerLoadedRef.current = true; setDuration(e.target.getDuration()); e.target.playVideo(); },
         onStateChange: (e) => setIsPlaying(e.data === window.YT.PlayerState.PLAYING),
+        onError: (e) => {
+          // 101/150 = el dueño del video desactivó la reproducción embebida
+          // 100 = el video fue eliminado o es privado
+          setPlayerError(e.data === 101 || e.data === 150 ? "embed" : "unavailable");
+        },
       },
     });
     return () => { ytPlayerRef.current?.destroy?.(); };
   }, [ytId, apiReady]);
+
+  // si a los 7s no cargó nada y tampoco avisó un error puntual, mostramos igual el aviso
+  useEffect(() => {
+    if (!ytId) return;
+    const t = setTimeout(() => { if (!playerLoadedRef.current) setPlayerError((prev) => prev || "timeout"); }, 7000);
+    return () => clearTimeout(t);
+  }, [ytId]);
 
   // --- progreso: YouTube no avisa el tiempo solo, hay que consultarlo ---
   useEffect(() => {
@@ -417,6 +431,30 @@ function ClassPlayer({ ytId, rawUrl, title }) {
   const timeFontSize = isFullscreen ? 16 : 12;
   const progressBarHeight = isFullscreen ? 7 : 5;
   const controlsGap = isFullscreen ? 22 : 12;
+
+  // si el video no se puede reproducir acá adentro, avisamos claro en vez de dejar la pantalla negra
+  if (playerError) {
+    const messages = {
+      embed: "El dueño de este video desactivó la reproducción embebida (fuera de YouTube). No hay forma de esquivar eso desde acá.",
+      unavailable: "Este video ya no está disponible o es privado.",
+      timeout: "El video está tardando demasiado en cargar. Puede que la reproducción embebida esté bloqueada.",
+    };
+    return (
+      <div style={{ position: "relative", width: "100%", paddingTop: "56.25%", background: "#000" }}>
+        <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 14, padding: 24, textAlign: "center" }}>
+          <div style={{ color: "#ddd", fontSize: 13, maxWidth: 380 }}>⚠️ {messages[playerError] || messages.unavailable}</div>
+          <a
+            href={rawUrl}
+            target="_blank"
+            rel="noreferrer"
+            style={{ background: RED, color: "#fff", padding: "10px 22px", borderRadius: 4, fontWeight: 700, fontSize: 14, textDecoration: "none" }}
+          >
+            Ver en YouTube
+          </a>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div
