@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import {
   Play, Info, ChevronLeft, ChevronRight, Search, Bell, ChevronDown,
-  X, Plus, ThumbsUp, Volume2, VolumeX, Calculator, FlaskConical,
+  X, Plus, ThumbsUp, Calculator, FlaskConical,
   Landmark, BookOpen, Leaf, Palette, Dumbbell, Atom, Check
 } from "lucide-react";
 
@@ -111,13 +111,21 @@ const SUBJECTS = [
 
 // Clases con progreso (para la fila "Seguir viendo")
 const CONTINUE_WATCHING = [
-  { ...SUBJECTS[1].classes[0], subjectColor: SUBJECTS[1].color, subjectName: SUBJECTS[1].name, progress: 62 },
-  { ...SUBJECTS[0].classes[2], subjectColor: SUBJECTS[0].color, subjectName: SUBJECTS[0].name, progress: 30 },
-  { ...SUBJECTS[3].classes[1], subjectColor: SUBJECTS[3].color, subjectName: SUBJECTS[3].name, progress: 85 },
-  { ...SUBJECTS[5].classes[0], subjectColor: SUBJECTS[5].color, subjectName: SUBJECTS[5].name, progress: 15 },
+  { ...SUBJECTS[1].classes[0], subjectColor: SUBJECTS[1].color, subjectName: SUBJECTS[1].name, icon: SUBJECTS[1].icon, progress: 62 },
+  { ...SUBJECTS[0].classes[2], subjectColor: SUBJECTS[0].color, subjectName: SUBJECTS[0].name, icon: SUBJECTS[0].icon, progress: 30 },
+  { ...SUBJECTS[3].classes[1], subjectColor: SUBJECTS[3].color, subjectName: SUBJECTS[3].name, icon: SUBJECTS[3].icon, progress: 85 },
+  { ...SUBJECTS[5].classes[0], subjectColor: SUBJECTS[5].color, subjectName: SUBJECTS[5].name, icon: SUBJECTS[5].icon, progress: 15 },
 ];
 
-const FEATURED = { ...SUBJECTS[1].classes[0], subjectColor: SUBJECTS[1].color, subjectName: SUBJECTS[1].name };
+// Pool de clases destacadas que rotan en el hero cada 5 segundos.
+// Agregá o sacá items acá para cambiar qué se muestra arriba de todo.
+const FEATURED_POOL = [
+  { ...SUBJECTS[1].classes[0], subjectColor: SUBJECTS[1].color, subjectName: SUBJECTS[1].name, subject: SUBJECTS[1] },
+  { ...SUBJECTS[0].classes[0], subjectColor: SUBJECTS[0].color, subjectName: SUBJECTS[0].name, subject: SUBJECTS[0] },
+  { ...SUBJECTS[3].classes[0], subjectColor: SUBJECTS[3].color, subjectName: SUBJECTS[3].name, subject: SUBJECTS[3] },
+  { ...SUBJECTS[5].classes[0], subjectColor: SUBJECTS[5].color, subjectName: SUBJECTS[5].name, subject: SUBJECTS[5] },
+  { ...SUBJECTS[2].classes[0], subjectColor: SUBJECTS[2].color, subjectName: SUBJECTS[2].name, subject: SUBJECTS[2] },
+];
 
 /* ============================================================
    UI TOKENS
@@ -132,20 +140,52 @@ const GUTTER = "clamp(20px, 4vw, 60px)"; // margen lateral consistente
 const MAX_WIDTH = 1800;            // ancho máx. de contenido, centrado
 const LOGO_FONT = "'Arial Black', 'Helvetica Neue', Arial, sans-serif"; // tipografía tipo logo Netflix (bold, condensada, en bloque)
 
+// Extrae el ID de video de cualquier link de YouTube (youtube.com/watch?v=, youtu.be/, shorts, embed)
+// Cuando pegues tus links reales en "videoUrl", esto se encarga solo de detectarlos.
+function getYouTubeId(url) {
+  if (!url) return null;
+  const match = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]{6,})/);
+  return match ? match[1] : null;
+}
+
 function Thumb({ classItem, color, Icon, tall }) {
+  const ytId = getYouTubeId(classItem.videoUrl);
+  const ytThumb = ytId ? `https://img.youtube.com/vi/${ytId}/hqdefault.jpg` : null;
+
   return (
     <div
       style={{
-        background: `linear-gradient(150deg, ${color}CC 0%, ${color}55 45%, ${BG} 100%)`,
         width: "100%",
         height: tall ? 220 : "100%",
         position: "relative",
-        display: "flex",
-        alignItems: "flex-end",
         overflow: "hidden",
+        background: ytThumb ? "#000" : `linear-gradient(150deg, ${color}CC 0%, ${color}55 45%, ${BG} 100%)`,
       }}
     >
-      <Icon size={64} color="rgba(255,255,255,0.25)" style={{ position: "absolute", top: 14, right: 14 }} />
+      {ytThumb ? (
+        <img src={ytThumb} alt={classItem.title} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} />
+      ) : (
+        <>
+          <div style={{ position: "absolute", inset: 0, backgroundImage: "repeating-linear-gradient(45deg, rgba(255,255,255,0.035) 0px, rgba(255,255,255,0.035) 2px, transparent 2px, transparent 14px)" }} />
+          <Icon size={84} color="rgba(255,255,255,0.22)" style={{ position: "absolute", top: 16, right: 16 }} />
+        </>
+      )}
+
+      {/* degradado inferior para que el texto siempre se lea bien, tenga o no imagen real */}
+      <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.1) 45%, transparent 68%)" }} />
+
+      {/* chip de duración */}
+      <div style={{ position: "absolute", top: 10, left: 10, background: "rgba(0,0,0,0.65)", color: "#fff", fontSize: 11, fontWeight: 700, padding: "3px 8px", borderRadius: 4 }}>
+        {classItem.duration}
+      </div>
+
+      {/* ícono de play que aparece al pasar el mouse por la tarjeta */}
+      <div className="thumb-play" style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", opacity: 0, transition: "opacity 200ms ease" }}>
+        <div style={{ width: 50, height: 50, borderRadius: "50%", background: "rgba(255,255,255,0.92)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <Play size={20} fill="#000" color="#000" style={{ marginLeft: 3 }} />
+        </div>
+      </div>
+
       <div style={{ padding: "10px 12px", position: "relative", zIndex: 1 }}>
         <div style={{ fontFamily: "Helvetica Neue, Arial, sans-serif", fontWeight: 700, fontSize: 18, letterSpacing: 0, color: "#fff", lineHeight: 1.15, textShadow: "0 2px 8px rgba(0,0,0,0.6)" }}>
           {classItem.title}
@@ -188,6 +228,7 @@ function Row({ title, items, onOpen }) {
             <div
               key={c.id}
               onClick={() => onOpen(c)}
+              className="card-item"
               style={{
                 flex: "0 0 auto", width: 280, cursor: "pointer", borderRadius: 4, overflow: "hidden",
                 background: CARD_BG, transition: "transform 220ms ease, box-shadow 220ms ease",
@@ -225,6 +266,7 @@ function Row({ title, items, onOpen }) {
 
 function Modal({ item, color, Icon, onClose }) {
   if (!item) return null;
+  const ytId = getYouTubeId(item.videoUrl);
   return (
     <div
       onClick={onClose}
@@ -275,7 +317,18 @@ function Modal({ item, color, Icon, onClose }) {
             📹 Todavía no cargaste el video de esta clase. Cuando lo subas, agregá la URL en el campo <code style={{ color: "#eee" }}>videoUrl</code> de este item y acá se va a reproducir automáticamente.
           </div>
         )}
-        {item.videoUrl && (
+        {item.videoUrl && ytId && (
+          <div style={{ position: "relative", width: "calc(100% - 64px)", margin: "0 32px 28px", paddingTop: "56.25%", borderRadius: 6, overflow: "hidden", background: "#000" }}>
+            <iframe
+              src={`https://www.youtube.com/embed/${ytId}`}
+              title={item.title}
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              style={{ position: "absolute", inset: 0, width: "100%", height: "100%", border: "none" }}
+            />
+          </div>
+        )}
+        {item.videoUrl && !ytId && (
           <video controls src={item.videoUrl} style={{ width: "calc(100% - 64px)", margin: "0 32px 28px", borderRadius: 6 }} />
         )}
       </div>
@@ -288,13 +341,23 @@ export default function ChacaFlix() {
   const [modalItem, setModalItem] = useState(null);
   const [modalColor, setModalColor] = useState(RED);
   const [modalIcon, setModalIcon] = useState(() => Calculator);
-  const [muted, setMuted] = useState(true);
+  const [featuredIndex, setFeaturedIndex] = useState(0);
+  const [heroPaused, setHeroPaused] = useState(false);
+  const featured = FEATURED_POOL[featuredIndex];
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  useEffect(() => {
+    if (heroPaused) return;
+    const timer = setInterval(() => {
+      setFeaturedIndex((i) => (i + 1) % FEATURED_POOL.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, [heroPaused]);
 
   const openModal = (item, subject) => {
     setModalItem(item);
@@ -306,6 +369,10 @@ export default function ChacaFlix() {
     <div style={{ background: BG, minHeight: "100vh", fontFamily: "Helvetica Neue, Arial, sans-serif" }}>
       <style>{`
         .no-scrollbar::-webkit-scrollbar { display: none; }
+        .card-item:hover .thumb-play { opacity: 1 !important; }
+        @keyframes heroFade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+        .hero-fade { animation: heroFade 800ms ease; }
+        @media (prefers-reduced-motion: reduce) { .hero-fade { animation: none; } }
       `}</style>
 
       {/* NAVBAR */}
@@ -343,11 +410,19 @@ export default function ChacaFlix() {
       </div>
 
       {/* HERO */}
-      <div style={{ position: "relative", height: "78vh", minHeight: 480 }}>
-        <div style={{
-          position: "absolute", inset: 0,
-          background: `linear-gradient(120deg, ${FEATURED.subjectColor}77 0%, ${BG} 75%)`,
-        }} />
+      <div
+        style={{ position: "relative", height: "78vh", minHeight: 480 }}
+        onMouseEnter={() => setHeroPaused(true)}
+        onMouseLeave={() => setHeroPaused(false)}
+      >
+        <div
+          key={`bg-${featuredIndex}`}
+          className="hero-fade"
+          style={{
+            position: "absolute", inset: 0,
+            background: `linear-gradient(120deg, ${featured.subjectColor}77 0%, ${BG} 75%)`,
+          }}
+        />
         <div style={{ position: "absolute", inset: 0, background: `linear-gradient(to top, ${BG} 2%, transparent 55%)` }} />
         <Atom size={340} color="rgba(255,255,255,0.06)" style={{ position: "absolute", right: 60, top: 40 }} />
 
@@ -356,36 +431,42 @@ export default function ChacaFlix() {
           position: "relative", height: "100%", maxWidth: MAX_WIDTH, margin: "0 auto",
           padding: `0 ${GUTTER}`, display: "flex", alignItems: "flex-end",
         }}>
-          <div style={{ maxWidth: 620, paddingBottom: 70 }}>
-            <div style={{ color: "#4ADE80", fontWeight: 700, fontSize: 14, marginBottom: 10 }}>Clase destacada · {FEATURED.subjectName}</div>
+          <div key={`content-${featuredIndex}`} className="hero-fade" style={{ maxWidth: 620, paddingBottom: 70 }}>
+            <div style={{ color: "#4ADE80", fontWeight: 700, fontSize: 14, marginBottom: 10 }}>Clase destacada · {featured.subjectName}</div>
             <div style={{ fontFamily: "Helvetica Neue, Arial, sans-serif", fontWeight: 800, fontSize: 56, color: "#fff", lineHeight: 1.02, letterSpacing: "-0.5px" }}>
-              {FEATURED.title}
+              {featured.title}
             </div>
             <div style={{ color: "#d2d2d2", fontSize: 15, margin: "18px 0", lineHeight: 1.5 }}>
-              {FEATURED.desc}
+              {featured.desc}
             </div>
-            <div style={{ display: "flex", gap: 12 }}>
+            <div style={{ display: "flex", gap: 12, marginBottom: 22 }}>
               <button
-                onClick={() => openModal(FEATURED, SUBJECTS[1])}
+                onClick={() => openModal(featured, featured.subject)}
                 style={{ background: "#fff", border: "none", borderRadius: 4, padding: "12px 26px", fontWeight: 700, fontSize: 15, display: "flex", alignItems: "center", gap: 8, cursor: "pointer" }}
               >
                 <Play size={20} fill="#000" /> Reproducir
               </button>
               <button
-                onClick={() => openModal(FEATURED, SUBJECTS[1])}
+                onClick={() => openModal(featured, featured.subject)}
                 style={{ background: "rgba(109,109,110,0.5)", color: "#fff", border: "none", borderRadius: 4, padding: "12px 26px", fontWeight: 700, fontSize: 15, display: "flex", alignItems: "center", gap: 8, cursor: "pointer" }}
               >
                 <Info size={20} /> Más información
               </button>
             </div>
+            <div style={{ display: "flex", gap: 7 }}>
+              {FEATURED_POOL.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => setFeaturedIndex(i)}
+                  aria-label={`Mostrar clase destacada ${i + 1}`}
+                  style={{
+                    width: i === featuredIndex ? 20 : 7, height: 7, borderRadius: 4, border: "none", cursor: "pointer",
+                    background: i === featuredIndex ? RED : "rgba(255,255,255,0.35)", transition: "all 300ms ease", padding: 0,
+                  }}
+                />
+              ))}
+            </div>
           </div>
-
-          <button
-            onClick={() => setMuted((m) => !m)}
-            style={{ position: "absolute", bottom: 70, right: 0, border: "1px solid rgba(255,255,255,0.5)", background: "rgba(0,0,0,0.4)", borderRadius: "50%", width: 42, height: 42, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}
-          >
-            {muted ? <VolumeX size={18} color="#fff" /> : <Volume2 size={18} color="#fff" />}
-          </button>
         </div>
       </div>
 
@@ -394,7 +475,7 @@ export default function ChacaFlix() {
         position: "relative", zIndex: 2, maxWidth: MAX_WIDTH, margin: "0 auto",
         padding: `0 ${GUTTER} 60px`, marginTop: -40,
       }}>
-        <Row title="Seguir viendo" items={CONTINUE_WATCHING} onOpen={(item) => openModal(item, { color: item.subjectColor, icon: Atom })} />
+        <Row title="Seguir viendo" items={CONTINUE_WATCHING} onOpen={(item) => openModal(item, { color: item.subjectColor, icon: item.icon })} />
         {SUBJECTS.map((s) => (
           <Row
             key={s.id}
