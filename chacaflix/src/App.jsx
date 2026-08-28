@@ -60,7 +60,7 @@ const SUBJECTS = [
     icon: Landmark,
     classes: [
       { id: "h1", title: "Historia de las civilizaciones", prof: "Prof. Castro", duration: "48 min", desc: "Documental recorriendo la historia humana: Edad Antigua, Edad Media y Edad Moderna.", videoUrl: "https://youtu.be/99I8tt5ZwKE" },
-      { id: "h2", title: "Independencia argentina", prof: "Prof. Castro", duration: "46 min", desc: "El proceso hacia la Declaración de la Independencia en 1816.", videoUrl: "https://youtu.be/kQWWCI_Wd_8" },
+      { id: "h2", title: "El planeta Tierra en 20 minutos", prof: "Prof. Castro", duration: "46 min", desc: "Documental que repasa la formación y las características principales del planeta Tierra.", videoUrl: "https://youtu.be/kQWWCI_Wd_8" },
       { id: "h3", title: "Primera Guerra Mundial", prof: "Prof. Núñez", duration: "52 min", desc: "Causas, alianzas y consecuencias del conflicto de 1914-1918.", videoUrl: "https://youtu.be/S8QavHAduhA" },
       { id: "h4", title: "Revolución Industrial", prof: "Prof. Núñez", duration: "44 min", desc: "Transformaciones económicas y sociales entre los siglos XVIII y XIX.", videoUrl: "https://youtu.be/1Li2W2XjV6I" },
     ],
@@ -422,7 +422,11 @@ function ClassPlayer({ ytId, rawUrl, title }) {
     <div
       ref={wrapperRef}
       onMouseMove={resetHideTimer}
-      style={{ position: "relative", width: "100%", paddingTop: "56.25%", background: "#000", overflow: "hidden" }}
+      style={
+        isFullscreen
+          ? { position: "fixed", inset: 0, width: "100vw", height: "100vh", background: "#000", overflow: "hidden", zIndex: 9999 }
+          : { position: "relative", width: "100%", paddingTop: "56.25%", background: "#000", overflow: "hidden" }
+      }
     >
       {ytId ? (
         <div ref={ytContainerRef} style={{ position: "absolute", inset: 0, filter: `brightness(${brightness})` }} />
