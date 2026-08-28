@@ -176,11 +176,6 @@ function Thumb({ classItem, color, Icon, tall }) {
       {/* degradado inferior para que el texto siempre se lea bien, tenga o no imagen real */}
       <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.1) 45%, transparent 68%)" }} />
 
-      {/* chip de duración */}
-      <div style={{ position: "absolute", top: 10, left: 10, background: "rgba(0,0,0,0.65)", color: "#fff", fontSize: 11, fontWeight: 700, padding: "3px 8px", borderRadius: 4 }}>
-        {classItem.duration}
-      </div>
-
       {/* ícono de play que aparece al pasar el mouse por la tarjeta */}
       <div className="thumb-play" style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", opacity: 0, transition: "opacity 200ms ease" }}>
         <div style={{ width: 50, height: 50, borderRadius: "50%", background: "rgba(255,255,255,0.92)", display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -188,11 +183,13 @@ function Thumb({ classItem, color, Icon, tall }) {
         </div>
       </div>
 
-      <div style={{ padding: "10px 12px", position: "relative", zIndex: 1 }}>
-        <div style={{ fontFamily: "Helvetica Neue, Arial, sans-serif", fontWeight: 700, fontSize: 18, letterSpacing: 0, color: "#fff", lineHeight: 1.15, textShadow: "0 2px 8px rgba(0,0,0,0.6)" }}>
-          {classItem.title}
+      {ytThumb && (
+        <div style={{ padding: "10px 12px", position: "relative", zIndex: 1 }}>
+          <div style={{ fontFamily: "Helvetica Neue, Arial, sans-serif", fontWeight: 700, fontSize: 18, letterSpacing: 0, color: "#fff", lineHeight: 1.15, textShadow: "0 2px 8px rgba(0,0,0,0.6)" }}>
+            {classItem.title}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }
@@ -558,9 +555,26 @@ function writeIdList(key, list) {
   try { localStorage.setItem(key, JSON.stringify(list)); } catch {}
 }
 
-function Modal({ item, color, Icon, onClose }) {
+// Muestra la portada real de un video de YouTube. Si la versión de alta
+// resolución no existe para ese video, cae automáticamente a una más chica.
+function YtCover({ ytId, style, alt }) {
+  const [src, setSrc] = useState(`https://img.youtube.com/vi/${ytId}/maxresdefault.jpg`);
+  const [fallenBack, setFallenBack] = useState(false);
+  return (
+    <img
+      src={src}
+      alt={alt || ""}
+      style={style}
+      onError={() => { if (!fallenBack) { setFallenBack(true); setSrc(`https://img.youtube.com/vi/${ytId}/hqdefault.jpg`); } }}
+    />
+  );
+}
+
+function Modal({ item, color, Icon, onClose, autoPlay }) {
   const [myList, setMyList] = useState(() => readIdList("chacaflix_my_list"));
   const [liked, setLiked] = useState(() => readIdList("chacaflix_liked"));
+  const [wantsPlay, setWantsPlay] = useState(autoPlay);
+  useEffect(() => { setWantsPlay(autoPlay); }, [item?.id, autoPlay]);
   if (!item) return null;
   const ytId = getYouTubeId(item.videoUrl);
 
@@ -591,11 +605,30 @@ function Modal({ item, color, Icon, onClose }) {
         onClick={(e) => e.stopPropagation()}
         style={{ background: "#181818", width: "min(760px, 100%)", borderRadius: 8, overflow: "hidden", maxHeight: "88vh", overflowY: "auto" }}
       >
-        {/* CABECERA: el reproductor real si hay video, o un aviso si todavía no se cargó */}
+        {/* CABECERA: reproductor real (si el usuario tocó "Reproducir"), vista previa (si tocó "Más información"), o aviso si no hay video */}
         <div style={{ position: "relative" }}>
-          {item.videoUrl ? (
+          {item.videoUrl && wantsPlay && (
             <ClassPlayer key={item.id} ytId={ytId} rawUrl={item.videoUrl} title={item.title} />
-          ) : (
+          )}
+          {item.videoUrl && !wantsPlay && (
+            <div style={{ position: "relative", height: 320, background: "#000" }}>
+              {ytId && (
+                <YtCover ytId={ytId} alt={item.title} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} />
+              )}
+              <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.15) 55%, transparent 75%)" }} />
+              <button
+                onClick={() => setWantsPlay(true)}
+                style={{ position: "absolute", inset: 0, margin: "auto", width: 64, height: 64, borderRadius: "50%", background: "rgba(255,255,255,0.92)", border: "none", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}
+                aria-label="Reproducir"
+              >
+                <Play size={26} fill="#000" color="#000" style={{ marginLeft: 3 }} />
+              </button>
+              <div style={{ position: "absolute", bottom: 24, left: 32, right: 32 }}>
+                <div style={{ fontFamily: "Helvetica Neue, Arial, sans-serif", fontWeight: 800, fontSize: 30, color: "#fff", letterSpacing: "-0.5px" }}>{item.title}</div>
+              </div>
+            </div>
+          )}
+          {!item.videoUrl && (
             <div style={{ position: "relative", height: 320, background: `linear-gradient(160deg, ${color}CC, ${BG})` }}>
               <Icon size={140} color="rgba(255,255,255,0.15)" style={{ position: "absolute", right: 20, top: 20 }} />
               <div style={{ position: "absolute", bottom: 24, left: 32, right: 32 }}>
@@ -610,10 +643,10 @@ function Modal({ item, color, Icon, onClose }) {
         </div>
 
         <div style={{ padding: "20px 32px 0" }}>
-          {item.videoUrl && (
+          {item.videoUrl && wantsPlay && (
             <div style={{ fontFamily: "Helvetica Neue, Arial, sans-serif", fontWeight: 800, fontSize: 26, color: "#fff", letterSpacing: "-0.5px" }}>{item.title}</div>
           )}
-          <div style={{ display: "flex", gap: 12, marginTop: item.videoUrl ? 14 : 0, marginBottom: 6 }}>
+          <div style={{ display: "flex", gap: 12, marginTop: item.videoUrl && wantsPlay ? 14 : 0, marginBottom: 6 }}>
             <button onClick={toggleMyList} style={pillBtn} aria-label={inMyList ? "Quitar de mi lista" : "Agregar a mi lista"} title={inMyList ? "En tu lista" : "Agregar a mi lista"}>
               {inMyList ? <Check size={18} color="#4ADE80" /> : <Plus size={18} color="#fff" />}
             </button>
@@ -652,9 +685,11 @@ export default function ChacaFlix() {
   const [modalItem, setModalItem] = useState(null);
   const [modalColor, setModalColor] = useState(RED);
   const [modalIcon, setModalIcon] = useState(() => Calculator);
+  const [modalAutoPlay, setModalAutoPlay] = useState(true);
   const [featuredIndex, setFeaturedIndex] = useState(0);
   const [heroPaused, setHeroPaused] = useState(false);
   const featured = FEATURED_POOL[featuredIndex];
+  const featuredYtId = getYouTubeId(featured.videoUrl);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -670,10 +705,11 @@ export default function ChacaFlix() {
     return () => clearInterval(timer);
   }, [heroPaused]);
 
-  const openModal = (item, subject) => {
+  const openModal = (item, subject, mode = "play") => {
     setModalItem(item);
     setModalColor(subject ? subject.color : (item.subjectColor || RED));
     setModalIcon(() => (subject ? subject.icon : Atom));
+    setModalAutoPlay(mode === "play");
   };
 
   return (
@@ -730,16 +766,17 @@ export default function ChacaFlix() {
         onMouseEnter={() => setHeroPaused(true)}
         onMouseLeave={() => setHeroPaused(false)}
       >
-        <div
-          key={`bg-${featuredIndex}`}
-          className="hero-fade"
-          style={{
-            position: "absolute", inset: 0,
-            background: `linear-gradient(120deg, ${featured.subjectColor}77 0%, ${BG} 75%)`,
-          }}
-        />
+        <div key={`bg-${featuredIndex}`} className="hero-fade" style={{ position: "absolute", inset: 0, overflow: "hidden" }}>
+          {featuredYtId ? (
+            <YtCover ytId={featuredYtId} alt={featured.title} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} />
+          ) : (
+            <div style={{ position: "absolute", inset: 0, background: `linear-gradient(120deg, ${featured.subjectColor}77 0%, ${BG} 75%)` }} />
+          )}
+          {/* tinte de color de la materia, para mantener identidad visual sobre la foto */}
+          <div style={{ position: "absolute", inset: 0, background: `linear-gradient(100deg, ${BG}F5 0%, ${BG}B0 28%, transparent 62%)` }} />
+        </div>
         <div style={{ position: "absolute", inset: 0, background: `linear-gradient(to top, ${BG} 2%, transparent 55%)` }} />
-        <Atom size={340} color="rgba(255,255,255,0.06)" style={{ position: "absolute", right: 60, top: 40 }} />
+        {!featuredYtId && <Atom size={340} color="rgba(255,255,255,0.06)" style={{ position: "absolute", right: 60, top: 40 }} />}
 
         {/* contenedor centrado, mismo ancho máx. y margen que el navbar y las filas */}
         <div style={{
@@ -756,13 +793,13 @@ export default function ChacaFlix() {
             </div>
             <div style={{ display: "flex", gap: 12, marginBottom: 22 }}>
               <button
-                onClick={() => openModal(featured, featured.subject)}
+                onClick={() => openModal(featured, featured.subject, "play")}
                 style={{ background: "#fff", border: "none", borderRadius: 4, padding: "12px 26px", fontWeight: 700, fontSize: 15, display: "flex", alignItems: "center", gap: 8, cursor: "pointer" }}
               >
                 <Play size={20} fill="#000" /> Reproducir
               </button>
               <button
-                onClick={() => openModal(featured, featured.subject)}
+                onClick={() => openModal(featured, featured.subject, "info")}
                 style={{ background: "rgba(109,109,110,0.5)", color: "#fff", border: "none", borderRadius: 4, padding: "12px 26px", fontWeight: 700, fontSize: 15, display: "flex", alignItems: "center", gap: 8, cursor: "pointer" }}
               >
                 <Info size={20} /> Más información
@@ -801,7 +838,7 @@ export default function ChacaFlix() {
         ))}
       </div>
 
-      <Modal item={modalItem} color={modalColor} Icon={modalIcon} onClose={() => setModalItem(null)} />
+      <Modal item={modalItem} color={modalColor} Icon={modalIcon} onClose={() => setModalItem(null)} autoPlay={modalAutoPlay} />
     </div>
   );
 }
