@@ -696,9 +696,8 @@ function Modal({ item, color, Icon, onClose, autoPlay }) {
    con el logo de Chacaflix. Se muestra una vez al abrir la página.
    ============================================================ */
 function IntroAnimation({ onDone }) {
-  // C aparece primero (0-450ms) → el resto de las letras se expande desde ahí en cascada
-  // (450-1250ms aprox.) → brillo (1250-1650ms) → se sostiene el logo 1 segundo completo →
-  // fundido a negro → entra solo, sin intervención del usuario.
+  // C aparece primero → el resto de las letras se expande desde ahí en cascada →
+  // se sostiene el logo 1 segundo completo → fundido a negro → entra solo.
   const CASCADE_START = 380;
   const CASCADE_STAGGER = 70;
   const CASCADE_DURATION = 420;
@@ -733,35 +732,21 @@ function IntroAnimation({ onDone }) {
           0% { opacity: 0; max-width: 0; }
           100% { opacity: 1; max-width: 1.3em; }
         }
-        @keyframes introFlash {
-          0%, 92% { opacity: 0; }
-          97% { opacity: 0.85; }
-          100% { opacity: 0; }
-        }
-        @keyframes introGlow {
-          0%, 60% { text-shadow: 0 0 0px rgba(229,9,20,0); }
-          80% { text-shadow: 0 0 45px rgba(229,9,20,0.8); }
-          100% { text-shadow: 0 0 16px rgba(229,9,20,0.5); }
-        }
         @keyframes introOut {
           0% { opacity: 1; }
           100% { opacity: 0; }
         }
-        .intro-wrap {
-          animation: introOut ${fadeDuration}ms ease ${holdEnd}ms forwards,
-                     introGlow ${cascadeEnd - CASCADE_START + 400}ms ease ${CASCADE_START}ms forwards;
-        }
+        .intro-wrap { animation: introOut ${fadeDuration}ms ease ${holdEnd}ms forwards; }
         .intro-letter-c { display: inline-block; animation: introC 400ms ease forwards; }
         .intro-letter {
           display: inline-block; overflow: hidden; white-space: nowrap; vertical-align: bottom;
           opacity: 0; max-width: 0;
           animation: introFromC ${CASCADE_DURATION}ms ease forwards;
         }
-        .intro-flash { position: absolute; inset: 0; background: #fff; animation: introFlash ${totalDuration}ms ease forwards; }
       `}</style>
 
       <div className="intro-wrap" style={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "center", width: "100%", padding: "0 8vw", boxSizing: "border-box" }}>
-        <div style={{ fontFamily: LOGO_FONT, fontWeight: 900, fontSize: "clamp(32px, 7vw, 96px)", color: RED, letterSpacing: "-0.03em", textTransform: "uppercase", whiteSpace: "nowrap" }}>
+        <div style={{ fontFamily: LOGO_FONT, fontWeight: 900, fontSize: "clamp(32px, 7vw, 96px)", color: RED, letterSpacing: "-0.03em", textTransform: "uppercase", whiteSpace: "nowrap", transform: "scaleY(1.14)", textShadow: "3px 4px 0px #7A0D12, 0 10px 24px rgba(0,0,0,0.6)" }}>
           {letters.map((l, i) =>
             i === 0 ? (
               <span key={i} className="intro-letter-c">{l}</span>
@@ -770,7 +755,6 @@ function IntroAnimation({ onDone }) {
             )
           )}
         </div>
-        <div className="intro-flash" />
       </div>
     </div>
   );
@@ -800,7 +784,7 @@ function ProfileGate({ onSelect }) {
 
   return (
     <div style={{ position: "fixed", inset: 0, background: BG, zIndex: 900, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: 24, fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif" }}>
-      <div style={{ color: RED, fontFamily: LOGO_FONT, fontWeight: 900, fontSize: 30, letterSpacing: "-1px", textTransform: "uppercase", position: "absolute", top: 32, left: "50%", transform: "translateX(-50%)" }}>
+      <div style={{ color: RED, fontFamily: LOGO_FONT, fontWeight: 900, fontSize: 30, letterSpacing: "-1px", textTransform: "uppercase", position: "absolute", top: 32, left: "50%", transform: "translateX(-50%)", textShadow: "2px 3px 0px #7A0D12, 0 6px 14px rgba(0,0,0,0.6)" }}>
         Chacaflix
       </div>
 
@@ -989,7 +973,7 @@ function BrowseApp({ profile, onSwitchProfile }) {
           display: "flex", alignItems: "center", justifyContent: "space-between",
         }}>
           <div style={{ display: "flex", alignItems: "center", gap: 36 }}>
-            <button onClick={() => goTo("home")} style={{ background: "transparent", border: "none", cursor: "pointer", color: RED, fontFamily: LOGO_FONT, fontWeight: 900, fontSize: 28, letterSpacing: "-1px", textTransform: "uppercase", padding: 0 }}>
+            <button onClick={() => goTo("home")} style={{ background: "transparent", border: "none", cursor: "pointer", color: RED, fontFamily: LOGO_FONT, fontWeight: 900, fontSize: 28, letterSpacing: "-1px", textTransform: "uppercase", padding: 0, textShadow: "2px 3px 0px #7A0D12, 0 6px 14px rgba(0,0,0,0.6)" }}>
               Chacaflix
             </button>
             <nav style={{ display: "flex", gap: 20, fontSize: 14 }}>
