@@ -696,9 +696,22 @@ function Modal({ item, color, Icon, onClose, autoPlay }) {
    con el logo de Chacaflix. Se muestra una vez al abrir la página.
    ============================================================ */
 function IntroAnimation({ onDone }) {
+  // C aparece primero (0-450ms) → el resto de las letras se expande desde ahí en cascada
+  // (450-1250ms aprox.) → brillo (1250-1650ms) → se sostiene el logo 1 segundo completo →
+  // fundido a negro → entra solo, sin intervención del usuario.
+  const CASCADE_START = 380;
+  const CASCADE_STAGGER = 70;
+  const CASCADE_DURATION = 420;
+  const otherLettersCount = 8; // "HACAFLIX"
+  const cascadeEnd = CASCADE_START + (otherLettersCount - 1) * CASCADE_STAGGER + CASCADE_DURATION;
+  const holdEnd = cascadeEnd + 1000; // 1 segundo de pausa una vez armado el logo completo
+  const fadeDuration = 500;
+  const totalDuration = holdEnd + fadeDuration;
+
   useEffect(() => {
-    const t = setTimeout(onDone, 2800);
+    const t = setTimeout(onDone, totalDuration);
     return () => clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [onDone]);
 
   const letters = "CHACAFLIX".split("");
@@ -711,47 +724,51 @@ function IntroAnimation({ onDone }) {
       }}
     >
       <style>{`
-        @keyframes introLetter {
-          0% { opacity: 0; transform: scale(0.4) translateY(10px); }
-          55% { opacity: 1; transform: scale(1.08) translateY(0); }
-          75% { transform: scale(1); }
+        @keyframes introC {
+          0% { opacity: 0; transform: scale(2.4); }
+          60% { opacity: 1; transform: scale(0.88); }
           100% { opacity: 1; transform: scale(1); }
         }
+        @keyframes introFromC {
+          0% { opacity: 0; transform: scale(0.15) translateX(-46px); }
+          65% { opacity: 1; transform: scale(1.12) translateX(3px); }
+          100% { opacity: 1; transform: scale(1) translateX(0); }
+        }
         @keyframes introFlash {
-          0%, 70% { opacity: 0; }
-          82% { opacity: 1; }
+          0%, 92% { opacity: 0; }
+          97% { opacity: 0.85; }
           100% { opacity: 0; }
         }
         @keyframes introGlow {
-          0% { text-shadow: 0 0 0px rgba(229,9,20,0); }
-          70% { text-shadow: 0 0 0px rgba(229,9,20,0); }
-          85% { text-shadow: 0 0 55px rgba(229,9,20,0.9); }
+          0%, 60% { text-shadow: 0 0 0px rgba(229,9,20,0); }
+          80% { text-shadow: 0 0 55px rgba(229,9,20,0.9); }
           100% { text-shadow: 0 0 18px rgba(229,9,20,0.55); }
         }
         @keyframes introOut {
           0% { opacity: 1; }
           100% { opacity: 0; }
         }
-        .intro-wrap { animation: introOut 500ms ease 2300ms forwards; }
-        .intro-letter { display: inline-block; animation: introLetter 700ms ease forwards, introGlow 2800ms ease forwards; }
-        .intro-flash { position: absolute; inset: 0; background: #fff; animation: introFlash 2800ms ease forwards; }
+        .intro-wrap {
+          animation: introOut ${fadeDuration}ms ease ${holdEnd}ms forwards,
+                     introGlow ${cascadeEnd - CASCADE_START + 400}ms ease ${CASCADE_START}ms forwards;
+        }
+        .intro-letter-c { display: inline-block; transform-origin: center; animation: introC 450ms cubic-bezier(.2,.8,.3,1.3) forwards; }
+        .intro-letter { display: inline-block; transform-origin: center; opacity: 0; animation: introFromC ${CASCADE_DURATION}ms cubic-bezier(.2,.8,.3,1.3) forwards; }
+        .intro-flash { position: absolute; inset: 0; background: #fff; animation: introFlash ${totalDuration}ms ease forwards; }
       `}</style>
 
       <div className="intro-wrap" style={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "center" }}>
         <div style={{ fontFamily: LOGO_FONT, fontWeight: 900, fontSize: "clamp(40px, 9vw, 110px)", color: RED, letterSpacing: "-2px", textTransform: "uppercase" }}>
-          {letters.map((l, i) => (
-            <span key={i} className="intro-letter" style={{ animationDelay: `${i * 60}ms, 0ms` }}>{l}</span>
-          ))}
+          {letters.map((l, i) =>
+            i === 0 ? (
+              <span key={i} className="intro-letter-c">{l}</span>
+            ) : (
+              <span key={i} className="intro-letter" style={{ animationDelay: `${CASCADE_START + (i - 1) * CASCADE_STAGGER}ms` }}>{l}</span>
+            )
+          )}
         </div>
         <div className="intro-flash" />
       </div>
-
-      <button
-        onClick={onDone}
-        style={{ position: "absolute", bottom: 28, right: 28, background: "transparent", border: "1px solid rgba(255,255,255,0.4)", color: "#fff", padding: "8px 16px", borderRadius: 4, fontSize: 13, cursor: "pointer" }}
-      >
-        Saltar intro
-      </button>
     </div>
   );
 }
