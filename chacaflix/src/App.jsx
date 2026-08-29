@@ -129,6 +129,25 @@ const FEATURED_POOL = [
   { ...SUBJECTS[2].classes[0], subjectColor: SUBJECTS[2].color, subjectName: SUBJECTS[2].name, subject: SUBJECTS[2] },
 ];
 
+// Devuelve todas las clases de todas las materias en una sola lista plana,
+// usada para "Mi lista", "Seguir viendo" y el buscador.
+function getAllClasses() {
+  const all = [];
+  SUBJECTS.forEach((s) => {
+    s.classes.forEach((c) => all.push({ ...c, color: s.color, icon: s.icon, subjectName: s.name, subject: s }));
+  });
+  return all;
+}
+
+// --- Perfiles (persisten en el navegador del alumno) ---
+const PROFILE_COLORS = ["#E50914", "#2E86FF", "#22C55E", "#F97316", "#A855F7", "#EAB308"];
+function readProfiles() {
+  try { return JSON.parse(localStorage.getItem("chacaflix_profiles") || "[]"); } catch { return []; }
+}
+function writeProfiles(list) {
+  try { localStorage.setItem("chacaflix_profiles", JSON.stringify(list)); } catch {}
+}
+
 /* ============================================================
    UI TOKENS
    ============================================================ */
@@ -173,23 +192,12 @@ function Thumb({ classItem, color, Icon, tall }) {
         </>
       )}
 
-      {/* degradado inferior para que el texto siempre se lea bien, tenga o no imagen real */}
-      <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.1) 45%, transparent 68%)" }} />
-
-      {/* ícono de play que aparece al pasar el mouse por la tarjeta */}
-      <div className="thumb-play" style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", opacity: 0, transition: "opacity 200ms ease" }}>
+      {/* ícono de play que aparece al pasar el mouse por la tarjeta, igual que Netflix */}
+      <div className="thumb-play" style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", opacity: 0, transition: "opacity 200ms ease", background: "rgba(0,0,0,0.25)" }}>
         <div style={{ width: 50, height: 50, borderRadius: "50%", background: "rgba(255,255,255,0.92)", display: "flex", alignItems: "center", justifyContent: "center" }}>
           <Play size={20} fill="#000" color="#000" style={{ marginLeft: 3 }} />
         </div>
       </div>
-
-      {ytThumb && (
-        <div style={{ padding: "10px 12px", position: "relative", zIndex: 1 }}>
-          <div style={{ fontFamily: "Helvetica Neue, Arial, sans-serif", fontWeight: 700, fontSize: 18, letterSpacing: 0, color: "#fff", lineHeight: 1.15, textShadow: "0 2px 8px rgba(0,0,0,0.6)" }}>
-            {classItem.title}
-          </div>
-        </div>
-      )}
     </div>
   );
 }
@@ -242,6 +250,9 @@ function Row({ title, items, onOpen }) {
                 </div>
               )}
               <div style={{ padding: "10px 12px 14px" }}>
+                {c.videoUrl && (
+                  <div style={{ color: "#fff", fontSize: 13, fontWeight: 700, marginBottom: 3, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{c.title}</div>
+                )}
                 <div style={{ color: "#fff", fontSize: 13, fontWeight: 600 }}>{c.prof}</div>
                 <div style={{ color: TEXT_MUTED, fontSize: 12, marginTop: 2 }}>{c.duration}</div>
               </div>
@@ -680,7 +691,205 @@ function Modal({ item, color, Icon, onClose, autoPlay }) {
   );
 }
 
-export default function ChacaFlix() {
+/* ============================================================
+   INTRO ANIMADA — homenaje a la animación de arranque de Netflix,
+   con el logo de Chacaflix. Se muestra una vez al abrir la página.
+   ============================================================ */
+function IntroAnimation({ onDone }) {
+  useEffect(() => {
+    const t = setTimeout(onDone, 2800);
+    return () => clearTimeout(t);
+  }, [onDone]);
+
+  const letters = "CHACAFLIX".split("");
+
+  return (
+    <div
+      style={{
+        position: "fixed", inset: 0, background: "#000", zIndex: 999,
+        display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden",
+      }}
+    >
+      <style>{`
+        @keyframes introLetter {
+          0% { opacity: 0; transform: scale(0.4) translateY(10px); }
+          55% { opacity: 1; transform: scale(1.08) translateY(0); }
+          75% { transform: scale(1); }
+          100% { opacity: 1; transform: scale(1); }
+        }
+        @keyframes introFlash {
+          0%, 70% { opacity: 0; }
+          82% { opacity: 1; }
+          100% { opacity: 0; }
+        }
+        @keyframes introGlow {
+          0% { text-shadow: 0 0 0px rgba(229,9,20,0); }
+          70% { text-shadow: 0 0 0px rgba(229,9,20,0); }
+          85% { text-shadow: 0 0 55px rgba(229,9,20,0.9); }
+          100% { text-shadow: 0 0 18px rgba(229,9,20,0.55); }
+        }
+        @keyframes introOut {
+          0% { opacity: 1; }
+          100% { opacity: 0; }
+        }
+        .intro-wrap { animation: introOut 500ms ease 2300ms forwards; }
+        .intro-letter { display: inline-block; animation: introLetter 700ms ease forwards, introGlow 2800ms ease forwards; }
+        .intro-flash { position: absolute; inset: 0; background: #fff; animation: introFlash 2800ms ease forwards; }
+      `}</style>
+
+      <div className="intro-wrap" style={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <div style={{ fontFamily: LOGO_FONT, fontWeight: 900, fontSize: "clamp(40px, 9vw, 110px)", color: RED, letterSpacing: "-2px", textTransform: "uppercase" }}>
+          {letters.map((l, i) => (
+            <span key={i} className="intro-letter" style={{ animationDelay: `${i * 60}ms, 0ms` }}>{l}</span>
+          ))}
+        </div>
+        <div className="intro-flash" />
+      </div>
+
+      <button
+        onClick={onDone}
+        style={{ position: "absolute", bottom: 28, right: 28, background: "transparent", border: "1px solid rgba(255,255,255,0.4)", color: "#fff", padding: "8px 16px", borderRadius: 4, fontSize: 13, cursor: "pointer" }}
+      >
+        Saltar intro
+      </button>
+    </div>
+  );
+}
+
+/* ============================================================
+   SELECCIÓN / CREACIÓN DE PERFIL — pantalla "¿Quién está mirando?"
+   ============================================================ */
+function ProfileGate({ onSelect }) {
+  const [profiles, setProfiles] = useState(() => readProfiles());
+  const [creating, setCreating] = useState(profiles.length === 0);
+  const [name, setName] = useState("");
+
+  const nextColor = PROFILE_COLORS[profiles.length % PROFILE_COLORS.length];
+
+  const createProfile = () => {
+    const trimmed = name.trim();
+    if (!trimmed) return;
+    const profile = { id: `p_${Date.now()}`, name: trimmed, color: nextColor };
+    const next = [...profiles, profile];
+    setProfiles(next);
+    writeProfiles(next);
+    setName("");
+    setCreating(false);
+    onSelect(profile);
+  };
+
+  return (
+    <div style={{ position: "fixed", inset: 0, background: BG, zIndex: 900, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: 24 }}>
+      <div style={{ color: RED, fontFamily: LOGO_FONT, fontWeight: 900, fontSize: 30, letterSpacing: "-1px", textTransform: "uppercase", position: "absolute", top: 32, left: "50%", transform: "translateX(-50%)" }}>
+        Chacaflix
+      </div>
+
+      <h1 style={{ color: "#fff", fontSize: "clamp(24px, 4vw, 40px)", fontWeight: 500, marginBottom: 36, textAlign: "center" }}>
+        {creating ? "Creá tu perfil" : "¿Quién está mirando?"}
+      </h1>
+
+      {!creating && (
+        <div style={{ display: "flex", gap: 24, flexWrap: "wrap", justifyContent: "center", maxWidth: 700 }}>
+          {profiles.map((p) => (
+            <button
+              key={p.id}
+              onClick={() => onSelect(p)}
+              style={{ background: "transparent", border: "none", cursor: "pointer", display: "flex", flexDirection: "column", alignItems: "center", gap: 10, width: 120 }}
+            >
+              <div
+                style={{
+                  width: 100, height: 100, borderRadius: 8, background: p.color, display: "flex", alignItems: "center", justifyContent: "center",
+                  fontSize: 40, fontWeight: 800, color: "#fff", fontFamily: "Helvetica Neue, Arial, sans-serif", transition: "outline 150ms ease",
+                }}
+                className="profile-avatar"
+              >
+                {p.name.charAt(0).toUpperCase()}
+              </div>
+              <span style={{ color: TEXT_MUTED, fontSize: 15 }}>{p.name}</span>
+            </button>
+          ))}
+
+          <button
+            onClick={() => setCreating(true)}
+            style={{ background: "transparent", border: "none", cursor: "pointer", display: "flex", flexDirection: "column", alignItems: "center", gap: 10, width: 120 }}
+          >
+            <div style={{ width: 100, height: 100, borderRadius: 8, background: "#2a2a2a", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <Plus size={40} color="#808080" />
+            </div>
+            <span style={{ color: TEXT_MUTED, fontSize: 15 }}>Agregar perfil</span>
+          </button>
+        </div>
+      )}
+
+      {creating && (
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 18, width: "min(360px, 90vw)" }}>
+          <div style={{ width: 100, height: 100, borderRadius: 8, background: nextColor, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 40, fontWeight: 800, color: "#fff" }}>
+            {name.trim() ? name.trim().charAt(0).toUpperCase() : "?"}
+          </div>
+          <input
+            autoFocus
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            onKeyDown={(e) => { if (e.key === "Enter") createProfile(); }}
+            placeholder="Nombre del perfil"
+            style={{ width: "100%", background: "#333", border: "1px solid #666", borderRadius: 4, padding: "12px 14px", color: "#fff", fontSize: 15, outline: "none" }}
+          />
+          <div style={{ display: "flex", gap: 12, width: "100%" }}>
+            {profiles.length > 0 && (
+              <button
+                onClick={() => setCreating(false)}
+                style={{ flex: 1, background: "transparent", border: "1px solid #666", color: "#fff", borderRadius: 4, padding: "12px 0", fontSize: 15, cursor: "pointer" }}
+              >
+                Cancelar
+              </button>
+            )}
+            <button
+              onClick={createProfile}
+              disabled={!name.trim()}
+              style={{ flex: 1, background: name.trim() ? "#fff" : "#555", color: name.trim() ? "#000" : "#999", border: "none", borderRadius: 4, padding: "12px 0", fontSize: 15, fontWeight: 700, cursor: name.trim() ? "pointer" : "default" }}
+            >
+              Continuar
+            </button>
+          </div>
+        </div>
+      )}
+
+      <style>{`.profile-avatar:hover { outline: 3px solid #fff; }`}</style>
+    </div>
+  );
+}
+
+/* ============================================================
+   GRILLA GENÉRICA — para las páginas de Materias, Seguir viendo y Mi lista
+   ============================================================ */
+function CardGrid({ items, onOpen, emptyMessage }) {
+  if (items.length === 0) {
+    return <div style={{ color: TEXT_MUTED, fontSize: 15, padding: "40px 0" }}>{emptyMessage}</div>;
+  }
+  return (
+    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))", gap: 18 }}>
+      {items.map((c) => (
+        <div
+          key={c.id}
+          onClick={() => onOpen(c)}
+          className="card-item"
+          style={{ cursor: "pointer", borderRadius: 4, overflow: "hidden", background: CARD_BG, transition: "transform 220ms ease, box-shadow 220ms ease" }}
+          onMouseEnter={(e) => { e.currentTarget.style.transform = "scale(1.04)"; e.currentTarget.style.boxShadow = "0 12px 30px rgba(0,0,0,0.75)"; e.currentTarget.style.zIndex = 5; e.currentTarget.style.backgroundColor = CARD_HOVER_BG; }}
+          onMouseLeave={(e) => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.boxShadow = "none"; e.currentTarget.style.zIndex = 0; e.currentTarget.style.backgroundColor = CARD_BG; }}
+        >
+          <Thumb classItem={c} color={c.color || c.subjectColor} Icon={c.icon || Calculator} tall />
+          <div style={{ padding: "10px 12px 14px" }}>
+            {c.videoUrl && <div style={{ color: "#fff", fontSize: 13, fontWeight: 700, marginBottom: 3, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{c.title}</div>}
+            <div style={{ color: "#fff", fontSize: 13, fontWeight: 600 }}>{c.prof}</div>
+            <div style={{ color: TEXT_MUTED, fontSize: 12, marginTop: 2 }}>{c.duration}</div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function BrowseApp({ profile, onSwitchProfile }) {
   const [scrolled, setScrolled] = useState(false);
   const [modalItem, setModalItem] = useState(null);
   const [modalColor, setModalColor] = useState(RED);
@@ -688,6 +897,11 @@ export default function ChacaFlix() {
   const [modalAutoPlay, setModalAutoPlay] = useState(true);
   const [featuredIndex, setFeaturedIndex] = useState(0);
   const [heroPaused, setHeroPaused] = useState(false);
+  const [view, setView] = useState("home"); // "home" | "materias" | "materia:<id>" | "seguir" | "milista" | "buscar"
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [notifOpen, setNotifOpen] = useState(false);
+  const [accountOpen, setAccountOpen] = useState(false);
   const featured = FEATURED_POOL[featuredIndex];
   const featuredYtId = getYouTubeId(featured.videoUrl);
 
@@ -712,6 +926,22 @@ export default function ChacaFlix() {
     setModalAutoPlay(mode === "play");
   };
 
+  const goTo = (v) => {
+    setView(v);
+    setSearchOpen(false);
+    setNotifOpen(false);
+    setAccountOpen(false);
+  };
+
+  // datos derivados según la vista activa (se recalculan solos cuando cambia algo)
+  const allClasses = getAllClasses();
+  const searchResults = searchQuery.trim()
+    ? allClasses.filter((c) => c.title.toLowerCase().includes(searchQuery.trim().toLowerCase()) || c.subjectName.toLowerCase().includes(searchQuery.trim().toLowerCase()))
+    : [];
+  const myListClasses = allClasses.filter((c) => readIdList("chacaflix_my_list").includes(c.id));
+  const activeSubjectId = view.startsWith("materia:") ? view.split(":")[1] : null;
+  const activeSubject = activeSubjectId ? SUBJECTS.find((s) => s.id === activeSubjectId) : null;
+
   return (
     <div style={{ background: BG, minHeight: "100vh", fontFamily: "Helvetica Neue, Arial, sans-serif" }}>
       <style>{`
@@ -730,7 +960,7 @@ export default function ChacaFlix() {
       <div
         style={{
           position: "fixed", top: 0, left: 0, right: 0, zIndex: 50,
-          background: scrolled ? BG_NAV_SOLID : "linear-gradient(to bottom, rgba(0,0,0,0.75), transparent)",
+          background: (scrolled || view !== "home") ? BG_NAV_SOLID : "linear-gradient(to bottom, rgba(0,0,0,0.75), transparent)",
           transition: "background 300ms ease",
         }}
       >
@@ -739,27 +969,96 @@ export default function ChacaFlix() {
           display: "flex", alignItems: "center", justifyContent: "space-between",
         }}>
           <div style={{ display: "flex", alignItems: "center", gap: 36 }}>
-            <div style={{ color: RED, fontFamily: LOGO_FONT, fontWeight: 900, fontSize: 28, letterSpacing: "-1px", textTransform: "uppercase" }}>
+            <button onClick={() => goTo("home")} style={{ background: "transparent", border: "none", cursor: "pointer", color: RED, fontFamily: LOGO_FONT, fontWeight: 900, fontSize: 28, letterSpacing: "-1px", textTransform: "uppercase", padding: 0 }}>
               Chacaflix
-            </div>
-            <nav style={{ display: "flex", gap: 20, fontSize: 14, color: "#e5e5e5" }}>
-              <span style={{ color: "#fff", fontWeight: 700, cursor: "pointer" }}>Inicio</span>
-              <span style={{ cursor: "pointer" }}>Materias</span>
-              <span style={{ cursor: "pointer" }}>Seguir viendo</span>
-              <span style={{ cursor: "pointer" }}>Mi lista</span>
+            </button>
+            <nav style={{ display: "flex", gap: 20, fontSize: 14 }}>
+              {[
+                { key: "home", label: "Inicio" },
+                { key: "materias", label: "Materias" },
+                { key: "seguir", label: "Seguir viendo" },
+                { key: "milista", label: "Mi lista" },
+              ].map((n) => (
+                <button
+                  key={n.key}
+                  onClick={() => goTo(n.key)}
+                  style={{
+                    background: "transparent", border: "none", cursor: "pointer", padding: 0,
+                    color: view === n.key ? "#fff" : "#e5e5e5", fontWeight: view === n.key ? 700 : 400, fontSize: 14,
+                  }}
+                >
+                  {n.label}
+                </button>
+              ))}
             </nav>
           </div>
-          <div style={{ display: "flex", alignItems: "center", gap: 20, color: "#fff" }}>
-            <Search size={19} style={{ cursor: "pointer" }} />
-            <Bell size={19} style={{ cursor: "pointer" }} />
-            <div style={{ display: "flex", alignItems: "center", gap: 6, cursor: "pointer" }}>
-              <div style={{ width: 30, height: 30, borderRadius: 6, background: RED, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 700 }}>A</div>
-              <ChevronDown size={14} />
+
+          <div style={{ display: "flex", alignItems: "center", gap: 20, color: "#fff", position: "relative" }}>
+            {/* BUSCADOR */}
+            <div style={{ display: "flex", alignItems: "center" }}>
+              {searchOpen && (
+                <input
+                  autoFocus
+                  value={searchQuery}
+                  onChange={(e) => { setSearchQuery(e.target.value); setView("buscar"); }}
+                  onBlur={() => { if (!searchQuery.trim()) setSearchOpen(false); }}
+                  placeholder="Títulos, materias..."
+                  style={{ background: "rgba(0,0,0,0.7)", border: "1px solid #666", borderRadius: 4, padding: "6px 10px", color: "#fff", fontSize: 13, width: 180, marginRight: 8, outline: "none" }}
+                />
+              )}
+              <Search
+                size={19}
+                style={{ cursor: "pointer" }}
+                onClick={() => {
+                  if (searchOpen && searchQuery.trim()) { setSearchQuery(""); setSearchOpen(false); if (view === "buscar") goTo("home"); }
+                  else setSearchOpen(true);
+                }}
+              />
+            </div>
+
+            {/* NOTIFICACIONES */}
+            <div style={{ position: "relative" }}>
+              <Bell size={19} style={{ cursor: "pointer" }} onClick={() => { setNotifOpen((v) => !v); setAccountOpen(false); }} />
+              {notifOpen && (
+                <div style={{ position: "absolute", top: 32, right: -10, width: 300, background: "#181818", border: "1px solid #333", borderRadius: 4, boxShadow: "0 12px 30px rgba(0,0,0,0.6)", padding: 8, zIndex: 60 }}>
+                  <div style={{ color: "#fff", fontWeight: 700, fontSize: 13, padding: "6px 8px" }}>Notificaciones</div>
+                  {[
+                    "📚 Nueva clase de Física disponible: Leyes de Newton",
+                    "🎬 Se agregaron 4 clases nuevas de Historia",
+                    "⏰ Te falta poco para terminar Razones trigonométricas",
+                  ].map((n, i) => (
+                    <div key={i} style={{ padding: "10px 8px", fontSize: 13, color: "#ddd", borderTop: i > 0 ? "1px solid #2a2a2a" : "none" }}>{n}</div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* CUENTA */}
+            <div style={{ position: "relative" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 6, cursor: "pointer" }} onClick={() => { setAccountOpen((v) => !v); setNotifOpen(false); }}>
+                <div style={{ width: 30, height: 30, borderRadius: 6, background: profile?.color || RED, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 700 }}>
+                  {profile?.name?.charAt(0)?.toUpperCase() || "A"}
+                </div>
+                <ChevronDown size={14} style={{ transform: accountOpen ? "rotate(180deg)" : "none", transition: "transform 150ms ease" }} />
+              </div>
+              {accountOpen && (
+                <div style={{ position: "absolute", top: 40, right: 0, width: 220, background: "#181818", border: "1px solid #333", borderRadius: 4, boxShadow: "0 12px 30px rgba(0,0,0,0.6)", padding: 8, zIndex: 60 }}>
+                  <div style={{ padding: "8px 10px", color: TEXT_MUTED, fontSize: 12 }}>Conectado como <strong style={{ color: "#fff" }}>{profile?.name}</strong></div>
+                  <button onClick={() => { setAccountOpen(false); onSwitchProfile(); }} style={{ width: "100%", textAlign: "left", background: "transparent", border: "none", color: "#fff", padding: "10px", fontSize: 13, cursor: "pointer", borderTop: "1px solid #2a2a2a" }}>
+                    Cambiar de perfil
+                  </button>
+                  <button onClick={() => { setAccountOpen(false); onSwitchProfile(); }} style={{ width: "100%", textAlign: "left", background: "transparent", border: "none", color: "#fff", padding: "10px", fontSize: 13, cursor: "pointer", borderTop: "1px solid #2a2a2a" }}>
+                    Cerrar sesión
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>
       </div>
 
+      {view === "home" && (
+      <>
       {/* HERO */}
       <div
         style={{ position: "relative", height: "78vh", minHeight: 480 }}
@@ -837,8 +1136,109 @@ export default function ChacaFlix() {
           />
         ))}
       </div>
+      </>
+      )}
+
+      {/* PÁGINA: MATERIAS — grilla de materias, o las clases de una materia si se eligió una */}
+      {view === "materias" && !activeSubject && (
+        <div style={{ maxWidth: MAX_WIDTH, margin: "0 auto", padding: `120px ${GUTTER} 60px` }}>
+          <h1 style={{ color: "#fff", fontSize: 28, fontWeight: 700, marginBottom: 24 }}>Materias</h1>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 18 }}>
+            {SUBJECTS.map((s) => (
+              <button
+                key={s.id}
+                onClick={() => goTo(`materia:${s.id}`)}
+                style={{
+                  background: `linear-gradient(150deg, ${s.color}CC 0%, ${s.color}55 45%, ${BG} 100%)`,
+                  border: "none", borderRadius: 6, height: 120, cursor: "pointer",
+                  display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 8,
+                }}
+              >
+                <s.icon size={30} color="#fff" />
+                <span style={{ color: "#fff", fontWeight: 700, fontSize: 14, textAlign: "center", padding: "0 8px" }}>{s.name}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {view === "materias" && activeSubject && (
+        <div style={{ maxWidth: MAX_WIDTH, margin: "0 auto", padding: `120px ${GUTTER} 60px` }}>
+          <button onClick={() => goTo("materias")} style={{ background: "transparent", border: "none", color: TEXT_MUTED, fontSize: 13, cursor: "pointer", marginBottom: 16, padding: 0 }}>
+            ← Todas las materias
+          </button>
+          <h1 style={{ color: "#fff", fontSize: 28, fontWeight: 700, marginBottom: 24, display: "flex", alignItems: "center", gap: 12 }}>
+            <activeSubject.icon size={28} color={activeSubject.color} /> {activeSubject.name}
+          </h1>
+          <CardGrid
+            items={activeSubject.classes.map((c) => ({ ...c, color: activeSubject.color, icon: activeSubject.icon, subjectName: activeSubject.name }))}
+            onOpen={(item) => openModal(item, activeSubject)}
+            emptyMessage="Todavía no hay clases en esta materia."
+          />
+        </div>
+      )}
+
+      {/* PÁGINA: SEGUIR VIENDO */}
+      {view === "seguir" && (
+        <div style={{ maxWidth: MAX_WIDTH, margin: "0 auto", padding: `120px ${GUTTER} 60px` }}>
+          <h1 style={{ color: "#fff", fontSize: 28, fontWeight: 700, marginBottom: 24 }}>Seguir viendo</h1>
+          <CardGrid
+            items={CONTINUE_WATCHING}
+            onOpen={(item) => openModal(item, { color: item.subjectColor, icon: item.icon })}
+            emptyMessage="No tenés clases empezadas todavía."
+          />
+        </div>
+      )}
+
+      {/* PÁGINA: MI LISTA */}
+      {view === "milista" && (
+        <div style={{ maxWidth: MAX_WIDTH, margin: "0 auto", padding: `120px ${GUTTER} 60px` }}>
+          <h1 style={{ color: "#fff", fontSize: 28, fontWeight: 700, marginBottom: 24 }}>Mi lista</h1>
+          <CardGrid
+            items={myListClasses}
+            onOpen={(item) => openModal(item, item.subject)}
+            emptyMessage="Todavía no agregaste ninguna clase a tu lista. Tocá el + en cualquier clase para guardarla acá."
+          />
+        </div>
+      )}
+
+      {/* PÁGINA: BUSCAR */}
+      {view === "buscar" && (
+        <div style={{ maxWidth: MAX_WIDTH, margin: "0 auto", padding: `120px ${GUTTER} 60px` }}>
+          <h1 style={{ color: "#fff", fontSize: 22, fontWeight: 700, marginBottom: 24 }}>
+            Resultados para "{searchQuery}"
+          </h1>
+          <CardGrid
+            items={searchResults}
+            onOpen={(item) => openModal(item, item.subject)}
+            emptyMessage="No encontramos ninguna clase con ese nombre."
+          />
+        </div>
+      )}
 
       <Modal item={modalItem} color={modalColor} Icon={modalIcon} onClose={() => setModalItem(null)} autoPlay={modalAutoPlay} />
     </div>
   );
+}
+
+/* ============================================================
+   RAÍZ DE LA APP — intro animada → selección de perfil → app
+   ============================================================ */
+export default function ChacaFlix() {
+  const [stage, setStage] = useState("intro"); // "intro" | "profiles" | "app"
+  const [activeProfile, setActiveProfile] = useState(null);
+
+  const handleIntroDone = () => setStage("profiles");
+  const handleProfileSelected = (profile) => {
+    setActiveProfile(profile);
+    setStage("app");
+  };
+  const handleSwitchProfile = () => {
+    setActiveProfile(null);
+    setStage("profiles");
+  };
+
+  if (stage === "intro") return <IntroAnimation onDone={handleIntroDone} />;
+  if (stage === "profiles") return <ProfileGate onSelect={handleProfileSelected} />;
+  return <BrowseApp profile={activeProfile} onSwitchProfile={handleSwitchProfile} />;
 }
