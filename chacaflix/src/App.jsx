@@ -726,16 +726,12 @@ function IntroAnimation({ onDone }) {
     >
       <style>{`
         @keyframes introC {
-          0% { opacity: 0; transform: scale(2.4); }
-          60% { opacity: 1; transform: scale(0.88); }
-          100% { opacity: 1; transform: scale(1); }
+          0% { opacity: 0; }
+          100% { opacity: 1; }
         }
         @keyframes introFromC {
-          0% { opacity: 0; max-width: 0; transform: scale(0.2); }
-          55% { opacity: 1; }
-          70% { transform: scale(1.14); }
-          85% { max-width: 1.3em; }
-          100% { opacity: 1; max-width: 1.3em; transform: scale(1); }
+          0% { opacity: 0; max-width: 0; }
+          100% { opacity: 1; max-width: 1.3em; }
         }
         @keyframes introFlash {
           0%, 92% { opacity: 0; }
@@ -744,8 +740,8 @@ function IntroAnimation({ onDone }) {
         }
         @keyframes introGlow {
           0%, 60% { text-shadow: 0 0 0px rgba(229,9,20,0); }
-          80% { text-shadow: 0 0 65px rgba(229,9,20,0.9); }
-          100% { text-shadow: 0 0 22px rgba(229,9,20,0.55); }
+          80% { text-shadow: 0 0 45px rgba(229,9,20,0.8); }
+          100% { text-shadow: 0 0 16px rgba(229,9,20,0.5); }
         }
         @keyframes introOut {
           0% { opacity: 1; }
@@ -755,17 +751,17 @@ function IntroAnimation({ onDone }) {
           animation: introOut ${fadeDuration}ms ease ${holdEnd}ms forwards,
                      introGlow ${cascadeEnd - CASCADE_START + 400}ms ease ${CASCADE_START}ms forwards;
         }
-        .intro-letter-c { display: inline-block; transform-origin: center; animation: introC 450ms cubic-bezier(.2,.8,.3,1.3) forwards; }
+        .intro-letter-c { display: inline-block; animation: introC 400ms ease forwards; }
         .intro-letter {
           display: inline-block; overflow: hidden; white-space: nowrap; vertical-align: bottom;
-          transform-origin: center; opacity: 0; max-width: 0;
-          animation: introFromC ${CASCADE_DURATION}ms cubic-bezier(.2,.8,.3,1.3) forwards;
+          opacity: 0; max-width: 0;
+          animation: introFromC ${CASCADE_DURATION}ms ease forwards;
         }
         .intro-flash { position: absolute; inset: 0; background: #fff; animation: introFlash ${totalDuration}ms ease forwards; }
       `}</style>
 
-      <div className="intro-wrap" style={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "center", width: "100%" }}>
-        <div style={{ fontFamily: LOGO_FONT, fontWeight: 900, fontSize: "clamp(56px, 16vw, 240px)", color: RED, letterSpacing: "-0.045em", textTransform: "uppercase", whiteSpace: "nowrap" }}>
+      <div className="intro-wrap" style={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "center", width: "100%", padding: "0 8vw", boxSizing: "border-box" }}>
+        <div style={{ fontFamily: LOGO_FONT, fontWeight: 900, fontSize: "clamp(32px, 7vw, 96px)", color: RED, letterSpacing: "-0.03em", textTransform: "uppercase", whiteSpace: "nowrap" }}>
           {letters.map((l, i) =>
             i === 0 ? (
               <span key={i} className="intro-letter-c">{l}</span>
