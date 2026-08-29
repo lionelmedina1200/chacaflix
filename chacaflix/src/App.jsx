@@ -721,6 +721,7 @@ function IntroAnimation({ onDone }) {
       style={{
         position: "fixed", inset: 0, background: "#000", zIndex: 999,
         display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden",
+        fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif",
       }}
     >
       <style>{`
@@ -730,9 +731,11 @@ function IntroAnimation({ onDone }) {
           100% { opacity: 1; transform: scale(1); }
         }
         @keyframes introFromC {
-          0% { opacity: 0; transform: scale(0.15) translateX(-46px); }
-          65% { opacity: 1; transform: scale(1.12) translateX(3px); }
-          100% { opacity: 1; transform: scale(1) translateX(0); }
+          0% { opacity: 0; max-width: 0; transform: scale(0.2); }
+          55% { opacity: 1; }
+          70% { transform: scale(1.14); }
+          85% { max-width: 1.3em; }
+          100% { opacity: 1; max-width: 1.3em; transform: scale(1); }
         }
         @keyframes introFlash {
           0%, 92% { opacity: 0; }
@@ -741,8 +744,8 @@ function IntroAnimation({ onDone }) {
         }
         @keyframes introGlow {
           0%, 60% { text-shadow: 0 0 0px rgba(229,9,20,0); }
-          80% { text-shadow: 0 0 55px rgba(229,9,20,0.9); }
-          100% { text-shadow: 0 0 18px rgba(229,9,20,0.55); }
+          80% { text-shadow: 0 0 65px rgba(229,9,20,0.9); }
+          100% { text-shadow: 0 0 22px rgba(229,9,20,0.55); }
         }
         @keyframes introOut {
           0% { opacity: 1; }
@@ -753,12 +756,16 @@ function IntroAnimation({ onDone }) {
                      introGlow ${cascadeEnd - CASCADE_START + 400}ms ease ${CASCADE_START}ms forwards;
         }
         .intro-letter-c { display: inline-block; transform-origin: center; animation: introC 450ms cubic-bezier(.2,.8,.3,1.3) forwards; }
-        .intro-letter { display: inline-block; transform-origin: center; opacity: 0; animation: introFromC ${CASCADE_DURATION}ms cubic-bezier(.2,.8,.3,1.3) forwards; }
+        .intro-letter {
+          display: inline-block; overflow: hidden; white-space: nowrap; vertical-align: bottom;
+          transform-origin: center; opacity: 0; max-width: 0;
+          animation: introFromC ${CASCADE_DURATION}ms cubic-bezier(.2,.8,.3,1.3) forwards;
+        }
         .intro-flash { position: absolute; inset: 0; background: #fff; animation: introFlash ${totalDuration}ms ease forwards; }
       `}</style>
 
-      <div className="intro-wrap" style={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <div style={{ fontFamily: LOGO_FONT, fontWeight: 900, fontSize: "clamp(40px, 9vw, 110px)", color: RED, letterSpacing: "-2px", textTransform: "uppercase" }}>
+      <div className="intro-wrap" style={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "center", width: "100%" }}>
+        <div style={{ fontFamily: LOGO_FONT, fontWeight: 900, fontSize: "clamp(56px, 16vw, 240px)", color: RED, letterSpacing: "-0.045em", textTransform: "uppercase", whiteSpace: "nowrap" }}>
           {letters.map((l, i) =>
             i === 0 ? (
               <span key={i} className="intro-letter-c">{l}</span>
@@ -796,7 +803,7 @@ function ProfileGate({ onSelect }) {
   };
 
   return (
-    <div style={{ position: "fixed", inset: 0, background: BG, zIndex: 900, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: 24 }}>
+    <div style={{ position: "fixed", inset: 0, background: BG, zIndex: 900, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: 24, fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif" }}>
       <div style={{ color: RED, fontFamily: LOGO_FONT, fontWeight: 900, fontSize: 30, letterSpacing: "-1px", textTransform: "uppercase", position: "absolute", top: 32, left: "50%", transform: "translateX(-50%)" }}>
         Chacaflix
       </div>
@@ -960,7 +967,7 @@ function BrowseApp({ profile, onSwitchProfile }) {
   const activeSubject = activeSubjectId ? SUBJECTS.find((s) => s.id === activeSubjectId) : null;
 
   return (
-    <div style={{ background: BG, minHeight: "100vh", fontFamily: "Helvetica Neue, Arial, sans-serif" }}>
+    <div style={{ background: BG, minHeight: "100vh", fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif" }}>
       <style>{`
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .card-item:hover .thumb-play { opacity: 1 !important; }
