@@ -29,12 +29,12 @@ const SEED_SUBJECTS = [
     color: "#2E86FF",
     iconKey: "Calculator",
     classes: [
-      { id: "m1", title: "Ecuaciones lineales", prof: "Prof. García", duration: "38 min", desc: "Resolución de ecuaciones de primer grado con una incógnita, con ejercicios guiados paso a paso.", videoUrl: "https://youtu.be/h3_GcxDq5h4", thumbnail: null },
-      { id: "m2", title: "Sistemas de ecuaciones", prof: "Prof. García", duration: "45 min", desc: "Métodos de sustitución, igualación y suma-resta para resolver sistemas 2x2.", videoUrl: "https://youtu.be/_IWs9s3XdOA", thumbnail: null },
-      { id: "m3", title: "Razones trigonométricas", prof: "Prof. García", duration: "41 min", desc: "Qué son el seno, coseno y tangente, y cómo se calculan en un triángulo rectángulo.", videoUrl: "https://youtu.be/7pUi5lvLf7c", thumbnail: null },
-      { id: "m4", title: "Teorema de Pitágoras", prof: "Prof. Ibáñez", duration: "35 min", desc: "Demostración clásica y aplicación en triángulos rectángulos.", videoUrl: "https://youtu.be/_IWs9s3XdOA", thumbnail: null },
-      { id: "m5", title: "Probabilidad básica", prof: "Prof. Ibáñez", duration: "29 min", desc: "Espacio muestral, sucesos y cálculo de probabilidades simples.", videoUrl: "https://youtu.be/LWRcpMfUCUE", thumbnail: null },
-      { id: "m6", title: "Introducción a derivadas", prof: "Prof. García", duration: "50 min", desc: "Concepto de límite y tasa de cambio como puerta de entrada al cálculo.", videoUrl: null, thumbnail: null },
+      { id: "m1", title: "Ecuaciones lineales", prof: "Prof. García", duration: "38 min", desc: "Resolución de ecuaciones de primer grado con una incógnita, con ejercicios guiados paso a paso.", videoUrl: "https://youtu.be/h3_GcxDq5h4", thumbnail: null, ciclo: "basico" },
+      { id: "m2", title: "Sistemas de ecuaciones", prof: "Prof. García", duration: "45 min", desc: "Métodos de sustitución, igualación y suma-resta para resolver sistemas 2x2.", videoUrl: "https://youtu.be/_IWs9s3XdOA", thumbnail: null, ciclo: "superior" },
+      { id: "m3", title: "Razones trigonométricas", prof: "Prof. García", duration: "41 min", desc: "Qué son el seno, coseno y tangente, y cómo se calculan en un triángulo rectángulo.", videoUrl: "https://youtu.be/7pUi5lvLf7c", thumbnail: null, ciclo: "basico" },
+      { id: "m4", title: "Teorema de Pitágoras", prof: "Prof. Ibáñez", duration: "35 min", desc: "Demostración clásica y aplicación en triángulos rectángulos.", videoUrl: "https://youtu.be/_IWs9s3XdOA", thumbnail: null, ciclo: "superior" },
+      { id: "m5", title: "Probabilidad básica", prof: "Prof. Ibáñez", duration: "29 min", desc: "Espacio muestral, sucesos y cálculo de probabilidades simples.", videoUrl: "https://youtu.be/LWRcpMfUCUE", thumbnail: null, ciclo: "basico" },
+      { id: "m6", title: "Introducción a derivadas", prof: "Prof. García", duration: "50 min", desc: "Concepto de límite y tasa de cambio como puerta de entrada al cálculo.", videoUrl: null, thumbnail: null, ciclo: "superior" },
     ],
   },
   {
@@ -43,11 +43,11 @@ const SEED_SUBJECTS = [
     color: "#FF6B35",
     iconKey: "Atom",
     classes: [
-      { id: "f1", title: "Leyes de Newton", prof: "Prof. Álvarez", duration: "47 min", desc: "Las tres leyes fundamentales de la dinámica, con ejemplos cotidianos y experimentos simples.", videoUrl: null, thumbnail: null },
-      { id: "f2", title: "Cinemática: MRU y MRUV", prof: "Prof. Álvarez", duration: "44 min", desc: "Movimiento rectilíneo uniforme y uniformemente variado, gráficos posición-tiempo.", videoUrl: null, thumbnail: null },
-      { id: "f3", title: "Energía cinética y potencial", prof: "Prof. Rossi", duration: "39 min", desc: "Conservación de la energía mecánica en sistemas simples.", videoUrl: null, thumbnail: null },
-      { id: "f4", title: "Ondas y sonido", prof: "Prof. Rossi", duration: "33 min", desc: "Propiedades de las ondas, frecuencia, amplitud y propagación del sonido.", videoUrl: null, thumbnail: null },
-      { id: "f5", title: "Electricidad básica", prof: "Prof. Álvarez", duration: "42 min", desc: "Circuitos simples, corriente, voltaje y resistencia.", videoUrl: null, thumbnail: null },
+      { id: "f1", title: "Leyes de Newton", prof: "Prof. Álvarez", duration: "47 min", desc: "Las tres leyes fundamentales de la dinámica, con ejemplos cotidianos y experimentos simples.", videoUrl: null, thumbnail: null, ciclo: "basico" },
+      { id: "f2", title: "Cinemática: MRU y MRUV", prof: "Prof. Álvarez", duration: "44 min", desc: "Movimiento rectilíneo uniforme y uniformemente variado, gráficos posición-tiempo.", videoUrl: null, thumbnail: null, ciclo: "superior" },
+      { id: "f3", title: "Energía cinética y potencial", prof: "Prof. Rossi", duration: "39 min", desc: "Conservación de la energía mecánica en sistemas simples.", videoUrl: null, thumbnail: null, ciclo: "basico" },
+      { id: "f4", title: "Ondas y sonido", prof: "Prof. Rossi", duration: "33 min", desc: "Propiedades de las ondas, frecuencia, amplitud y propagación del sonido.", videoUrl: null, thumbnail: null, ciclo: "superior" },
+      { id: "f5", title: "Electricidad básica", prof: "Prof. Álvarez", duration: "42 min", desc: "Circuitos simples, corriente, voltaje y resistencia.", videoUrl: null, thumbnail: null, ciclo: "basico" },
     ],
   },
   {
@@ -56,10 +56,10 @@ const SEED_SUBJECTS = [
     color: "#22C55E",
     iconKey: "FlaskConical",
     classes: [
-      { id: "q1", title: "Tabla periódica", prof: "Prof. Funes", duration: "36 min", desc: "Organización de los elementos, grupos, períodos y propiedades periódicas.", videoUrl: "https://youtu.be/9B3UHUVziIE", thumbnail: null },
-      { id: "q2", title: "Enlace químico", prof: "Prof. Funes", duration: "40 min", desc: "Enlace iónico, covalente y metálico explicados con modelos moleculares.", videoUrl: "https://youtu.be/t_kbksviWx8", thumbnail: null },
-      { id: "q3", title: "Reacciones químicas", prof: "Prof. Domínguez", duration: "37 min", desc: "Tipos de reacciones y balanceo de ecuaciones químicas.", videoUrl: "https://youtu.be/4B_719zRWL8", thumbnail: null },
-      { id: "q4", title: "Ácidos y bases", prof: "Prof. Domínguez", duration: "31 min", desc: "Escala de pH y reacciones de neutralización con ejemplos de laboratorio.", videoUrl: "https://youtu.be/jIbnc0j_ihk", thumbnail: null },
+      { id: "q1", title: "Tabla periódica", prof: "Prof. Funes", duration: "36 min", desc: "Organización de los elementos, grupos, períodos y propiedades periódicas.", videoUrl: "https://youtu.be/9B3UHUVziIE", thumbnail: null, ciclo: "superior" },
+      { id: "q2", title: "Enlace químico", prof: "Prof. Funes", duration: "40 min", desc: "Enlace iónico, covalente y metálico explicados con modelos moleculares.", videoUrl: "https://youtu.be/t_kbksviWx8", thumbnail: null, ciclo: "basico" },
+      { id: "q3", title: "Reacciones químicas", prof: "Prof. Domínguez", duration: "37 min", desc: "Tipos de reacciones y balanceo de ecuaciones químicas.", videoUrl: "https://youtu.be/4B_719zRWL8", thumbnail: null, ciclo: "superior" },
+      { id: "q4", title: "Ácidos y bases", prof: "Prof. Domínguez", duration: "31 min", desc: "Escala de pH y reacciones de neutralización con ejemplos de laboratorio.", videoUrl: "https://youtu.be/jIbnc0j_ihk", thumbnail: null, ciclo: "basico" },
     ],
   },
   {
@@ -68,10 +68,10 @@ const SEED_SUBJECTS = [
     color: "#C9A227",
     iconKey: "Landmark",
     classes: [
-      { id: "h1", title: "Historia de las civilizaciones", prof: "Prof. Castro", duration: "48 min", desc: "Documental recorriendo la historia humana: Edad Antigua, Edad Media y Edad Moderna.", videoUrl: "https://youtu.be/99I8tt5ZwKE", thumbnail: null },
-      { id: "h2", title: "El planeta Tierra en 20 minutos", prof: "Prof. Castro", duration: "46 min", desc: "Documental que repasa la formación y las características principales del planeta Tierra.", videoUrl: "https://youtu.be/kQWWCI_Wd_8", thumbnail: null },
-      { id: "h3", title: "Primera Guerra Mundial", prof: "Prof. Núñez", duration: "52 min", desc: "Causas, alianzas y consecuencias del conflicto de 1914-1918.", videoUrl: "https://youtu.be/S8QavHAduhA", thumbnail: null },
-      { id: "h4", title: "Revolución Industrial", prof: "Prof. Núñez", duration: "44 min", desc: "Transformaciones económicas y sociales entre los siglos XVIII y XIX.", videoUrl: "https://youtu.be/1Li2W2XjV6I", thumbnail: null },
+      { id: "h1", title: "Historia de las civilizaciones", prof: "Prof. Castro", duration: "48 min", desc: "Documental recorriendo la historia humana: Edad Antigua, Edad Media y Edad Moderna.", videoUrl: "https://youtu.be/99I8tt5ZwKE", thumbnail: null, ciclo: "superior" },
+      { id: "h2", title: "El planeta Tierra en 20 minutos", prof: "Prof. Castro", duration: "46 min", desc: "Documental que repasa la formación y las características principales del planeta Tierra.", videoUrl: "https://youtu.be/kQWWCI_Wd_8", thumbnail: null, ciclo: "basico" },
+      { id: "h3", title: "Primera Guerra Mundial", prof: "Prof. Núñez", duration: "52 min", desc: "Causas, alianzas y consecuencias del conflicto de 1914-1918.", videoUrl: "https://youtu.be/S8QavHAduhA", thumbnail: null, ciclo: "superior" },
+      { id: "h4", title: "Revolución Industrial", prof: "Prof. Núñez", duration: "44 min", desc: "Transformaciones económicas y sociales entre los siglos XVIII y XIX.", videoUrl: "https://youtu.be/1Li2W2XjV6I", thumbnail: null, ciclo: "basico" },
     ],
   },
   {
@@ -80,9 +80,9 @@ const SEED_SUBJECTS = [
     color: "#E11D48",
     iconKey: "BookOpen",
     classes: [
-      { id: "l1", title: "El género narrativo", prof: "Prof. Medina", duration: "34 min", desc: "Narrador, personajes, tiempo y espacio en el relato literario.", videoUrl: null, thumbnail: null },
-      { id: "l2", title: "Análisis de 'Martín Fierro'", prof: "Prof. Medina", duration: "50 min", desc: "Contexto histórico y análisis de la obra cumbre del gauchesco.", videoUrl: null, thumbnail: null },
-      { id: "l3", title: "Recursos literarios", prof: "Prof. Salas", duration: "30 min", desc: "Metáfora, símil, hipérbole y otras figuras retóricas con ejemplos.", videoUrl: null, thumbnail: null },
+      { id: "l1", title: "El género narrativo", prof: "Prof. Medina", duration: "34 min", desc: "Narrador, personajes, tiempo y espacio en el relato literario.", videoUrl: null, thumbnail: null, ciclo: "superior" },
+      { id: "l2", title: "Análisis de 'Martín Fierro'", prof: "Prof. Medina", duration: "50 min", desc: "Contexto histórico y análisis de la obra cumbre del gauchesco.", videoUrl: null, thumbnail: null, ciclo: "basico" },
+      { id: "l3", title: "Recursos literarios", prof: "Prof. Salas", duration: "30 min", desc: "Metáfora, símil, hipérbole y otras figuras retóricas con ejemplos.", videoUrl: null, thumbnail: null, ciclo: "superior" },
     ],
   },
   {
@@ -91,10 +91,10 @@ const SEED_SUBJECTS = [
     color: "#16A34A",
     iconKey: "Leaf",
     classes: [
-      { id: "b1", title: "La célula", prof: "Prof. Ortiz", duration: "39 min", desc: "Estructura y función de la célula eucariota y procariota.", videoUrl: null, thumbnail: null },
-      { id: "b2", title: "Fotosíntesis", prof: "Prof. Ortiz", duration: "35 min", desc: "Proceso de conversión de luz solar en energía química en las plantas.", videoUrl: null, thumbnail: null },
-      { id: "b3", title: "Sistema circulatorio", prof: "Prof. Bravo", duration: "41 min", desc: "Recorrido de la sangre, corazón y vasos sanguíneos.", videoUrl: null, thumbnail: null },
-      { id: "b4", title: "Genética mendeliana", prof: "Prof. Bravo", duration: "43 min", desc: "Leyes de Mendel y cruzamientos básicos con ejemplos de dominancia.", videoUrl: null, thumbnail: null },
+      { id: "b1", title: "La célula", prof: "Prof. Ortiz", duration: "39 min", desc: "Estructura y función de la célula eucariota y procariota.", videoUrl: null, thumbnail: null, ciclo: "basico" },
+      { id: "b2", title: "Fotosíntesis", prof: "Prof. Ortiz", duration: "35 min", desc: "Proceso de conversión de luz solar en energía química en las plantas.", videoUrl: null, thumbnail: null, ciclo: "superior" },
+      { id: "b3", title: "Sistema circulatorio", prof: "Prof. Bravo", duration: "41 min", desc: "Recorrido de la sangre, corazón y vasos sanguíneos.", videoUrl: null, thumbnail: null, ciclo: "basico" },
+      { id: "b4", title: "Genética mendeliana", prof: "Prof. Bravo", duration: "43 min", desc: "Leyes de Mendel y cruzamientos básicos con ejemplos de dominancia.", videoUrl: null, thumbnail: null, ciclo: "superior" },
     ],
   },
   {
@@ -103,8 +103,8 @@ const SEED_SUBJECTS = [
     color: "#A855F7",
     iconKey: "Palette",
     classes: [
-      { id: "a1", title: "Historia del arte: Renacimiento", prof: "Prof. Lima", duration: "37 min", desc: "Principales artistas y obras del Renacimiento italiano.", videoUrl: null, thumbnail: null },
-      { id: "a2", title: "Teoría del color", prof: "Prof. Lima", duration: "28 min", desc: "Colores primarios, secundarios, complementarios y armonías.", videoUrl: null, thumbnail: null },
+      { id: "a1", title: "Historia del arte: Renacimiento", prof: "Prof. Lima", duration: "37 min", desc: "Principales artistas y obras del Renacimiento italiano.", videoUrl: null, thumbnail: null, ciclo: "basico" },
+      { id: "a2", title: "Teoría del color", prof: "Prof. Lima", duration: "28 min", desc: "Colores primarios, secundarios, complementarios y armonías.", videoUrl: null, thumbnail: null, ciclo: "superior" },
     ],
   },
   {
@@ -113,8 +113,8 @@ const SEED_SUBJECTS = [
     color: "#F97316",
     iconKey: "Dumbbell",
     classes: [
-      { id: "e1", title: "Reglas del vóley", prof: "Prof. Sosa", duration: "22 min", desc: "Reglamento básico, posiciones y sistema de puntos.", videoUrl: null, thumbnail: null },
-      { id: "e2", title: "Calentamiento y elongación", prof: "Prof. Sosa", duration: "18 min", desc: "Rutina de entrada en calor previa a la actividad física.", videoUrl: null, thumbnail: null },
+      { id: "e1", title: "Reglas del vóley", prof: "Prof. Sosa", duration: "22 min", desc: "Reglamento básico, posiciones y sistema de puntos.", videoUrl: null, thumbnail: null, ciclo: "basico" },
+      { id: "e2", title: "Calentamiento y elongación", prof: "Prof. Sosa", duration: "18 min", desc: "Rutina de entrada en calor previa a la actividad física.", videoUrl: null, thumbnail: null, ciclo: "superior" },
     ],
   },
 ];
@@ -202,14 +202,15 @@ async function fetchYouTubeDuration(ytId) {
   });
 }
 
-// --- Perfiles (persisten en el navegador del alumno) ---
-const PROFILE_COLORS = ["#E50914", "#2E86FF", "#22C55E", "#F97316", "#A855F7", "#EAB308"];
-function readProfiles() {
-  try { return JSON.parse(localStorage.getItem("chacaflix_profiles") || "[]"); } catch { return []; }
-}
-function writeProfiles(list) {
-  try { localStorage.setItem("chacaflix_profiles", JSON.stringify(list)); } catch {}
-}
+/* ============================================================
+   CICLOS — cada clase pertenece a uno de los dos ciclos, y cada
+   alumno queda asignado a uno al registrarse.
+   ============================================================ */
+const CYCLES = {
+  basico: { key: "basico", label: "Ciclo Básico", sublabel: "1° a 3° año" },
+  superior: { key: "superior", label: "Ciclo Superior", sublabel: "4° a 7° año" },
+};
+const CYCLE_LIST = Object.values(CYCLES);
 
 /* ============================================================
    UI TOKENS
@@ -827,108 +828,163 @@ function IntroAnimation({ onDone }) {
 }
 
 /* ============================================================
-   SELECCIÓN / CREACIÓN DE PERFIL — pantalla "¿Quién está mirando?"
+   DIÁLOGO DE CONFIRMACIÓN — reemplaza los confirm() feos del
+   navegador por algo con la estética del sitio.
    ============================================================ */
-function ProfileGate({ onSelect, onAdminRequest }) {
-  const [profiles, setProfiles] = useState(() => readProfiles());
-  const [creating, setCreating] = useState(profiles.length === 0);
-  const [name, setName] = useState("");
+function ConfirmDialog({ title = "¿Estás seguro?", message, confirmLabel = "Confirmar", onConfirm, onCancel }) {
+  return (
+    <div
+      onClick={onCancel}
+      style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.75)", zIndex: 1000, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        style={{ background: "#181818", width: "min(400px, 100%)", borderRadius: 8, padding: 28, border: "1px solid #2a2a2a", boxShadow: "0 20px 50px rgba(0,0,0,0.6)" }}
+      >
+        <h3 style={{ color: "#fff", fontSize: 19, fontWeight: 700, margin: "0 0 12px" }}>{title}</h3>
+        <p style={{ color: "#d2d2d2", fontSize: 14, lineHeight: 1.5, margin: "0 0 26px" }}>{message}</p>
+        <div style={{ display: "flex", gap: 10, justifyContent: "flex-end" }}>
+          <button
+            onClick={onCancel}
+            style={{ background: "transparent", border: "1px solid #555", color: "#fff", padding: "10px 20px", borderRadius: 4, fontSize: 14, fontWeight: 600, cursor: "pointer" }}
+          >
+            Cancelar
+          </button>
+          <button
+            onClick={onConfirm}
+            style={{ background: RED, border: "none", color: "#fff", padding: "10px 20px", borderRadius: 4, fontSize: 14, fontWeight: 700, cursor: "pointer" }}
+          >
+            {confirmLabel}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
 
-  const nextColor = PROFILE_COLORS[profiles.length % PROFILE_COLORS.length];
+/* ============================================================
+   CUENTAS DE ALUMNO — usuario, contraseña y ciclo asignado.
+   NOTA DE SEGURIDAD: esto es un sitio 100% estático sin servidor,
+   así que las contraseñas quedan guardadas en el navegador tal cual
+   (no hay forma de "hashear" nada de manera segura sin un backend).
+   Sirve para separar el contenido por ciclo, no para datos sensibles.
+   ============================================================ */
+function readAccounts() {
+  try { return JSON.parse(localStorage.getItem("chacaflix_accounts") || "[]"); } catch { return []; }
+}
+function writeAccounts(list) {
+  try { localStorage.setItem("chacaflix_accounts", JSON.stringify(list)); } catch {}
+}
+const ACCOUNT_COLORS = ["#E50914", "#2E86FF", "#22C55E", "#F97316", "#A855F7", "#EAB308"];
 
-  const createProfile = () => {
-    const trimmed = name.trim();
-    if (!trimmed) return;
-    const profile = { id: `p_${Date.now()}`, name: trimmed, color: nextColor };
-    const next = [...profiles, profile];
-    setProfiles(next);
-    writeProfiles(next);
-    setName("");
-    setCreating(false);
-    onSelect(profile);
+function AuthGate({ onAuthenticated, onAdminRequest }) {
+  const [mode, setMode] = useState("login"); // "login" | "register"
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [ciclo, setCiclo] = useState("basico");
+  const [error, setError] = useState("");
+
+  const switchMode = (m) => { setMode(m); setError(""); setPassword(""); setConfirmPassword(""); };
+
+  const submit = () => {
+    const accounts = readAccounts();
+    const u = username.trim();
+    if (!u || !password) { setError("Completá usuario y contraseña."); return; }
+
+    if (mode === "login") {
+      const found = accounts.find((a) => a.username.toLowerCase() === u.toLowerCase());
+      if (!found || found.password !== password) { setError("Usuario o contraseña incorrectos."); return; }
+      onAuthenticated(found);
+    } else {
+      if (accounts.some((a) => a.username.toLowerCase() === u.toLowerCase())) { setError("Ese nombre de usuario ya está registrado."); return; }
+      if (password.length < 4) { setError("La contraseña tiene que tener al menos 4 caracteres."); return; }
+      if (password !== confirmPassword) { setError("Las contraseñas no coinciden."); return; }
+      const account = {
+        id: `acc_${Date.now()}`, username: u, password, ciclo,
+        color: ACCOUNT_COLORS[accounts.length % ACCOUNT_COLORS.length],
+      };
+      writeAccounts([...accounts, account]);
+      onAuthenticated(account);
+    }
   };
 
   return (
-    <div style={{ position: "fixed", inset: 0, background: BG, zIndex: 900, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: 24, fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif" }}>
-      <div style={{ color: RED, fontFamily: LOGO_FONT, fontWeight: 900, fontSize: 30, letterSpacing: "-1px", textTransform: "uppercase", position: "absolute", top: 32, left: "50%", transform: "translateX(-50%)", textShadow: "2px 3px 0px #7A0D12, 0 6px 14px rgba(0,0,0,0.6)" }}>
+    <div style={{ position: "fixed", inset: 0, background: BG, zIndex: 900, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: 24, fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif", overflowY: "auto" }}>
+      <div style={{ color: RED, fontFamily: LOGO_FONT, fontWeight: 900, fontSize: 30, letterSpacing: "-1px", textTransform: "uppercase", marginBottom: 30, textShadow: "2px 3px 0px #7A0D12, 0 6px 14px rgba(0,0,0,0.6)" }}>
         Chacaflix
       </div>
 
-      <h1 style={{ color: "#fff", fontSize: "clamp(24px, 4vw, 40px)", fontWeight: 500, marginBottom: 36, textAlign: "center" }}>
-        {creating ? "Creá tu perfil" : "¿Quién está mirando?"}
-      </h1>
+      <div style={{ width: "min(360px, 90vw)", background: "#000000cc", border: "1px solid #262626", borderRadius: 8, padding: 32 }}>
+        <h1 style={{ color: "#fff", fontSize: 26, fontWeight: 700, marginBottom: 22 }}>
+          {mode === "login" ? "Iniciar sesión" : "Crear cuenta"}
+        </h1>
 
-      {!creating && (
-        <div style={{ display: "flex", gap: 24, flexWrap: "wrap", justifyContent: "center", maxWidth: 700 }}>
-          {profiles.map((p) => (
-            <button
-              key={p.id}
-              onClick={() => onSelect(p)}
-              style={{ background: "transparent", border: "none", cursor: "pointer", display: "flex", flexDirection: "column", alignItems: "center", gap: 10, width: 120 }}
-            >
-              <div
-                style={{
-                  width: 100, height: 100, borderRadius: 8, background: p.color, display: "flex", alignItems: "center", justifyContent: "center",
-                  fontSize: 40, fontWeight: 800, color: "#fff", fontFamily: "Helvetica Neue, Arial, sans-serif", transition: "outline 150ms ease",
-                }}
-                className="profile-avatar"
-              >
-                {p.name.charAt(0).toUpperCase()}
-              </div>
-              <span style={{ color: TEXT_MUTED, fontSize: 15 }}>{p.name}</span>
-            </button>
-          ))}
+        <input
+          autoFocus
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          placeholder="Usuario"
+          style={{ width: "100%", background: "#333", border: "1px solid #666", borderRadius: 4, padding: "12px 14px", color: "#fff", fontSize: 15, outline: "none", marginBottom: 12, boxSizing: "border-box" }}
+        />
+        <input
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          onKeyDown={(e) => { if (e.key === "Enter" && mode === "login") submit(); }}
+          placeholder="Contraseña"
+          style={{ width: "100%", background: "#333", border: "1px solid #666", borderRadius: 4, padding: "12px 14px", color: "#fff", fontSize: 15, outline: "none", marginBottom: 12, boxSizing: "border-box" }}
+        />
 
-          <button
-            onClick={() => setCreating(true)}
-            style={{ background: "transparent", border: "none", cursor: "pointer", display: "flex", flexDirection: "column", alignItems: "center", gap: 10, width: 120 }}
-          >
-            <div style={{ width: 100, height: 100, borderRadius: 8, background: "#2a2a2a", display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <Plus size={40} color="#808080" />
+        {mode === "register" && (
+          <>
+            <input
+              type="password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              placeholder="Repetir contraseña"
+              style={{ width: "100%", background: "#333", border: "1px solid #666", borderRadius: 4, padding: "12px 14px", color: "#fff", fontSize: 15, outline: "none", marginBottom: 16, boxSizing: "border-box" }}
+            />
+            <label style={{ display: "block", color: TEXT_MUTED, fontSize: 12, fontWeight: 700, marginBottom: 8, textTransform: "uppercase", letterSpacing: "0.03em" }}>
+              ¿En qué ciclo estás?
+            </label>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 16 }}>
+              {CYCLE_LIST.map((c) => (
+                <button
+                  key={c.key}
+                  onClick={() => setCiclo(c.key)}
+                  style={{
+                    display: "flex", flexDirection: "column", alignItems: "flex-start", textAlign: "left",
+                    background: ciclo === c.key ? "#3a1013" : "#2a2a2a", border: ciclo === c.key ? `1px solid ${RED}` : "1px solid #444",
+                    borderRadius: 6, padding: "10px 14px", cursor: "pointer",
+                  }}
+                >
+                  <span style={{ color: "#fff", fontSize: 14, fontWeight: 700 }}>{c.label}</span>
+                  <span style={{ color: TEXT_MUTED, fontSize: 12 }}>{c.sublabel}</span>
+                </button>
+              ))}
             </div>
-            <span style={{ color: TEXT_MUTED, fontSize: 15 }}>Agregar perfil</span>
-          </button>
-        </div>
-      )}
+          </>
+        )}
 
-      {creating && (
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 18, width: "min(360px, 90vw)" }}>
-          <div style={{ width: 100, height: 100, borderRadius: 8, background: nextColor, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 40, fontWeight: 800, color: "#fff" }}>
-            {name.trim() ? name.trim().charAt(0).toUpperCase() : "?"}
-          </div>
-          <input
-            autoFocus
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            onKeyDown={(e) => { if (e.key === "Enter") createProfile(); }}
-            placeholder="Nombre del perfil"
-            style={{ width: "100%", background: "#333", border: "1px solid #666", borderRadius: 4, padding: "12px 14px", color: "#fff", fontSize: 15, outline: "none" }}
-          />
-          <div style={{ display: "flex", gap: 12, width: "100%" }}>
-            {profiles.length > 0 && (
-              <button
-                onClick={() => setCreating(false)}
-                style={{ flex: 1, background: "transparent", border: "1px solid #666", color: "#fff", borderRadius: 4, padding: "12px 0", fontSize: 15, cursor: "pointer" }}
-              >
-                Cancelar
-              </button>
-            )}
-            <button
-              onClick={createProfile}
-              disabled={!name.trim()}
-              style={{ flex: 1, background: name.trim() ? "#fff" : "#555", color: name.trim() ? "#000" : "#999", border: "none", borderRadius: 4, padding: "12px 0", fontSize: 15, fontWeight: 700, cursor: name.trim() ? "pointer" : "default" }}
-            >
-              Continuar
-            </button>
-          </div>
-        </div>
-      )}
+        {error && <div style={{ color: RED, fontSize: 13, marginBottom: 14 }}>{error}</div>}
 
-      <style>{`.profile-avatar:hover { outline: 3px solid #fff; }`}</style>
+        <button onClick={submit} style={{ width: "100%", background: RED, border: "none", borderRadius: 4, padding: "12px 0", color: "#fff", fontWeight: 700, fontSize: 15, cursor: "pointer", marginBottom: 14 }}>
+          {mode === "login" ? "Iniciar sesión" : "Registrarme"}
+        </button>
+
+        <div style={{ color: TEXT_MUTED, fontSize: 13 }}>
+          {mode === "login" ? (
+            <>¿Todavía no tenés cuenta? <span onClick={() => switchMode("register")} style={{ color: "#fff", cursor: "pointer", fontWeight: 600 }}>Registrate</span></>
+          ) : (
+            <>¿Ya tenés cuenta? <span onClick={() => switchMode("login")} style={{ color: "#fff", cursor: "pointer", fontWeight: 600 }}>Iniciá sesión</span></>
+          )}
+        </div>
+      </div>
 
       <button
         onClick={onAdminRequest}
-        style={{ position: "absolute", bottom: 24, background: "transparent", border: "none", color: "#555", fontSize: 12, cursor: "pointer" }}
+        style={{ marginTop: 24, background: "transparent", border: "none", color: "#555", fontSize: 12, cursor: "pointer" }}
       >
         Acceso administrador
       </button>
@@ -966,7 +1022,10 @@ function CardGrid({ items, onOpen, emptyMessage }) {
   );
 }
 
-function BrowseApp({ profile, onSwitchProfile, subjects, onOpenAdmin }) {
+function BrowseApp({ profile, onSwitchProfile, subjects: allSubjects, onOpenAdmin }) {
+  // el alumno solo tiene que ver las materias y clases de su propio ciclo;
+  // filtramos acá una sola vez y el resto del componente ya usa "subjects" filtrado.
+  const subjects = allSubjects.map((s) => ({ ...s, classes: s.classes.filter((c) => c.ciclo === profile?.ciclo) }));
   const [scrolled, setScrolled] = useState(false);
   const [modalItem, setModalItem] = useState(null);
   const [modalColor, setModalColor] = useState(RED);
@@ -1119,21 +1178,21 @@ function BrowseApp({ profile, onSwitchProfile, subjects, onOpenAdmin }) {
             <div style={{ position: "relative" }}>
               <div style={{ display: "flex", alignItems: "center", gap: 6, cursor: "pointer" }} onClick={() => { setAccountOpen((v) => !v); setNotifOpen(false); }}>
                 <div style={{ width: 30, height: 30, borderRadius: 6, background: profile?.color || RED, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 700 }}>
-                  {profile?.name?.charAt(0)?.toUpperCase() || "A"}
+                  {profile?.username?.charAt(0)?.toUpperCase() || "A"}
                 </div>
                 <ChevronDown size={14} style={{ transform: accountOpen ? "rotate(180deg)" : "none", transition: "transform 150ms ease" }} />
               </div>
               {accountOpen && (
                 <div style={{ position: "absolute", top: 40, right: 0, width: 220, background: "#181818", border: "1px solid #333", borderRadius: 4, boxShadow: "0 12px 30px rgba(0,0,0,0.6)", padding: 8, zIndex: 60 }}>
-                  <div style={{ padding: "8px 10px", color: TEXT_MUTED, fontSize: 12 }}>Conectado como <strong style={{ color: "#fff" }}>{profile?.name}</strong></div>
+                  <div style={{ padding: "8px 10px", color: TEXT_MUTED, fontSize: 12 }}>
+                    Conectado como <strong style={{ color: "#fff" }}>{profile?.username}</strong>
+                    <div style={{ marginTop: 2 }}>{CYCLES[profile?.ciclo]?.label}</div>
+                  </div>
                   {onOpenAdmin && (
                     <button onClick={() => { setAccountOpen(false); onOpenAdmin(); }} style={{ width: "100%", textAlign: "left", background: "transparent", border: "none", color: "#fff", padding: "10px", fontSize: 13, cursor: "pointer", borderTop: "1px solid #2a2a2a" }}>
                       Panel de administrador
                     </button>
                   )}
-                  <button onClick={() => { setAccountOpen(false); onSwitchProfile(); }} style={{ width: "100%", textAlign: "left", background: "transparent", border: "none", color: "#fff", padding: "10px", fontSize: 13, cursor: "pointer", borderTop: "1px solid #2a2a2a" }}>
-                    Cambiar de perfil
-                  </button>
                   <button onClick={() => { setAccountOpen(false); onSwitchProfile(); }} style={{ width: "100%", textAlign: "left", background: "transparent", border: "none", color: "#fff", padding: "10px", fontSize: 13, cursor: "pointer", borderTop: "1px solid #2a2a2a" }}>
                     Cerrar sesión
                   </button>
@@ -1224,7 +1283,7 @@ function BrowseApp({ profile, onSwitchProfile, subjects, onOpenAdmin }) {
         {continueWatching.length > 0 && (
           <Row title="Seguir viendo" items={continueWatching} onOpen={(item) => openModal(item, { color: item.subjectColor, icon: item.icon })} />
         )}
-        {subjects.map((s) => (
+        {subjects.filter((s) => s.classes.length > 0).map((s) => (
           <Row
             key={s.id}
             title={s.name}
@@ -1374,18 +1433,24 @@ function AdminDashboard({ subjects, onAddClass, onUpdateClass, onDeleteClass, on
   const [classForm, setClassForm] = useState(null); // null = cerrado, {} = nuevo, {...} = editando
   const [subjectForm, setSubjectForm] = useState(null);
   const [infoItem, setInfoItem] = useState(null); // para ver el detalle de un video desde el top 5
+  const [confirmState, setConfirmState] = useState(null); // {title, message, confirmLabel, onConfirm}
+  const [materiaDetailId, setMateriaDetailId] = useState(null); // materia abierta en detalle, con sus dos ciclos
+  const [materiaCiclo, setMateriaCiclo] = useState("basico"); // pestaña de ciclo activa dentro del detalle
 
   const allClasses = getAllClasses(subjects);
   const views = getViews();
-  const students = readProfiles();
+  const students = readAccounts();
+  const materiaDetail = materiaDetailId ? subjects.find((s) => s.id === materiaDetailId) : null;
 
   const top5 = [...allClasses]
     .map((c) => ({ ...c, views: views[c.id] || 0 }))
     .sort((a, b) => b.views - a.views)
     .slice(0, 5);
 
-  const openNewClass = () => setClassForm({ id: null, subjectId: subjects[0]?.id || "", title: "", prof: "", desc: "", videoUrl: "", thumbnail: "", duration: "" });
-  const openEditClass = (c) => setClassForm({ id: c.id, subjectId: c.subjectId, title: c.title, prof: c.prof, desc: c.desc, videoUrl: c.videoUrl || "", thumbnail: c.thumbnail || "", duration: c.duration || "" });
+  const askConfirm = (opts) => setConfirmState(opts);
+
+  const openNewClass = (subjectId, ciclo) => setClassForm({ id: null, subjectId: subjectId || subjects[0]?.id || "", ciclo: ciclo || "basico", title: "", prof: "", desc: "", videoUrl: "", thumbnail: "", duration: "" });
+  const openEditClass = (c) => setClassForm({ id: c.id, subjectId: c.subjectId, ciclo: c.ciclo || "basico", title: c.title, prof: c.prof, desc: c.desc, videoUrl: c.videoUrl || "", thumbnail: c.thumbnail || "", duration: c.duration || "" });
 
   const openNewSubject = () => setSubjectForm({ id: null, name: "", color: SUBJECT_COLOR_OPTIONS[subjects.length % SUBJECT_COLOR_OPTIONS.length], iconKey: ICON_OPTIONS[0] });
   const openEditSubject = (s) => setSubjectForm({ id: s.id, name: s.name, color: s.color, iconKey: s.iconKey });
@@ -1488,7 +1553,7 @@ function AdminDashboard({ subjects, onAddClass, onUpdateClass, onDeleteClass, on
           <div>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
               <h3 style={{ color: "#fff", fontSize: 16, fontWeight: 700 }}>Todos los videos ({allClasses.length})</h3>
-              <button onClick={openNewClass} style={{ display: "flex", alignItems: "center", gap: 6, background: RED, border: "none", color: "#fff", padding: "10px 16px", borderRadius: 4, fontSize: 13, fontWeight: 700, cursor: "pointer" }}>
+              <button onClick={() => openNewClass()} style={{ display: "flex", alignItems: "center", gap: 6, background: RED, border: "none", color: "#fff", padding: "10px 16px", borderRadius: 4, fontSize: 13, fontWeight: 700, cursor: "pointer" }}>
                 <Plus size={16} /> Agregar clase
               </button>
             </div>
@@ -1506,7 +1571,12 @@ function AdminDashboard({ subjects, onAddClass, onUpdateClass, onDeleteClass, on
                     <Pencil size={14} />
                   </button>
                   <button
-                    onClick={() => { if (window.confirm(`¿Borrar "${c.title}"?`)) onDeleteClass(c.subjectId, c.id); }}
+                    onClick={() => askConfirm({
+                      title: "Borrar clase",
+                      message: `¿Seguro que querés borrar "${c.title}"? Esta acción no se puede deshacer.`,
+                      confirmLabel: "Borrar",
+                      onConfirm: () => { onDeleteClass(c.subjectId, c.id); setConfirmState(null); },
+                    })}
                     style={{ background: "transparent", border: "1px solid #444", color: RED, padding: 8, borderRadius: 4, cursor: "pointer" }}
                     aria-label="Borrar"
                   >
@@ -1519,7 +1589,7 @@ function AdminDashboard({ subjects, onAddClass, onUpdateClass, onDeleteClass, on
         )}
 
         {/* ===== MATERIAS ===== */}
-        {tab === "materias" && (
+        {tab === "materias" && !materiaDetail && (
           <div>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
               <h3 style={{ color: "#fff", fontSize: 16, fontWeight: 700 }}>Materias ({subjects.length})</h3>
@@ -1529,7 +1599,11 @@ function AdminDashboard({ subjects, onAddClass, onUpdateClass, onDeleteClass, on
             </div>
             <div style={{ background: CARD_BG, borderRadius: 6, overflow: "hidden" }}>
               {subjects.map((s, i) => (
-                <div key={s.id} style={{ display: "flex", alignItems: "center", gap: 14, padding: "12px 16px", borderTop: i > 0 ? "1px solid #262626" : "none" }}>
+                <div
+                  key={s.id}
+                  onClick={() => { setMateriaDetailId(s.id); setMateriaCiclo("basico"); }}
+                  style={{ display: "flex", alignItems: "center", gap: 14, padding: "12px 16px", borderTop: i > 0 ? "1px solid #262626" : "none", cursor: "pointer" }}
+                >
                   <div style={{ width: 36, height: 36, borderRadius: 6, background: s.color, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
                     <s.icon size={18} color="#fff" />
                   </div>
@@ -1537,11 +1611,102 @@ function AdminDashboard({ subjects, onAddClass, onUpdateClass, onDeleteClass, on
                     <div style={{ color: "#fff", fontSize: 14, fontWeight: 600 }}>{s.name}</div>
                     <div style={{ color: TEXT_MUTED, fontSize: 12 }}>{s.classes.length} clases</div>
                   </div>
-                  <button onClick={() => openEditSubject(s)} style={{ background: "transparent", border: "1px solid #444", color: "#fff", padding: 8, borderRadius: 4, cursor: "pointer" }} aria-label="Editar">
+                  <button
+                    onClick={(e) => { e.stopPropagation(); openEditSubject(s); }}
+                    style={{ background: "transparent", border: "1px solid #444", color: "#fff", padding: 8, borderRadius: 4, cursor: "pointer" }}
+                    aria-label="Editar"
+                  >
                     <Pencil size={14} />
                   </button>
                   <button
-                    onClick={() => { if (window.confirm(`¿Borrar la materia "${s.name}" y sus ${s.classes.length} clases?`)) onDeleteSubject(s.id); }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      askConfirm({
+                        title: "Borrar materia",
+                        message: `¿Seguro que querés borrar la materia "${s.name}" y sus ${s.classes.length} clases? Esta acción no se puede deshacer.`,
+                        confirmLabel: "Borrar",
+                        onConfirm: () => { onDeleteSubject(s.id); setConfirmState(null); },
+                      });
+                    }}
+                    style={{ background: "transparent", border: "1px solid #444", color: RED, padding: 8, borderRadius: 4, cursor: "pointer" }}
+                    aria-label="Borrar"
+                  >
+                    <Trash2 size={14} />
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* ===== DETALLE DE UNA MATERIA — separado por ciclo ===== */}
+        {tab === "materias" && materiaDetail && (
+          <div>
+            <button onClick={() => setMateriaDetailId(null)} style={{ background: "transparent", border: "none", color: TEXT_MUTED, fontSize: 13, cursor: "pointer", marginBottom: 16, padding: 0, display: "flex", alignItems: "center", gap: 6 }}>
+              <ArrowLeft size={14} /> Todas las materias
+            </button>
+
+            <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 20 }}>
+              <div style={{ width: 40, height: 40, borderRadius: 6, background: materiaDetail.color, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <materiaDetail.icon size={20} color="#fff" />
+              </div>
+              <h3 style={{ color: "#fff", fontSize: 20, fontWeight: 700, margin: 0 }}>{materiaDetail.name}</h3>
+            </div>
+
+            {/* pestañas de ciclo — misma materia, contenido separado por año */}
+            <div style={{ display: "flex", gap: 8, marginBottom: 20 }}>
+              {CYCLE_LIST.map((c) => {
+                const count = materiaDetail.classes.filter((cl) => cl.ciclo === c.key).length;
+                return (
+                  <button
+                    key={c.key}
+                    onClick={() => setMateriaCiclo(c.key)}
+                    style={{
+                      flex: 1, textAlign: "left", padding: "12px 16px", borderRadius: 6, cursor: "pointer",
+                      background: materiaCiclo === c.key ? "#3a1013" : CARD_BG,
+                      border: materiaCiclo === c.key ? `1px solid ${RED}` : "1px solid transparent",
+                    }}
+                  >
+                    <div style={{ color: "#fff", fontSize: 14, fontWeight: 700 }}>{c.label}</div>
+                    <div style={{ color: TEXT_MUTED, fontSize: 12 }}>{c.sublabel} · {count} clase{count !== 1 ? "s" : ""}</div>
+                  </button>
+                );
+              })}
+            </div>
+
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
+              <h4 style={{ color: "#fff", fontSize: 14, fontWeight: 700, margin: 0 }}>Clases de {CYCLES[materiaCiclo].label.toLowerCase()}</h4>
+              <button
+                onClick={() => openNewClass(materiaDetail.id, materiaCiclo)}
+                style={{ display: "flex", alignItems: "center", gap: 6, background: RED, border: "none", color: "#fff", padding: "10px 16px", borderRadius: 4, fontSize: 13, fontWeight: 700, cursor: "pointer" }}
+              >
+                <Plus size={16} /> Agregar clase acá
+              </button>
+            </div>
+
+            <div style={{ background: CARD_BG, borderRadius: 6, overflow: "hidden" }}>
+              {materiaDetail.classes.filter((c) => c.ciclo === materiaCiclo).length === 0 && (
+                <div style={{ padding: 16, color: TEXT_MUTED, fontSize: 13 }}>Todavía no hay clases de {materiaDetail.name} en este ciclo.</div>
+              )}
+              {materiaDetail.classes.filter((c) => c.ciclo === materiaCiclo).map((c, i) => (
+                <div key={c.id} style={{ display: "flex", alignItems: "center", gap: 14, padding: "12px 16px", borderTop: i > 0 ? "1px solid #262626" : "none" }}>
+                  <div style={{ width: 70, height: 42, borderRadius: 3, overflow: "hidden", flexShrink: 0 }}>
+                    <Thumb classItem={c} color={materiaDetail.color} Icon={materiaDetail.icon} tall={false} />
+                  </div>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ color: "#fff", fontSize: 14, fontWeight: 600, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{c.title}</div>
+                    <div style={{ color: TEXT_MUTED, fontSize: 12 }}>{c.prof} · {c.duration}{!c.videoUrl && " · sin video"}</div>
+                  </div>
+                  <button onClick={() => openEditClass({ ...c, subjectId: materiaDetail.id })} style={{ background: "transparent", border: "1px solid #444", color: "#fff", padding: 8, borderRadius: 4, cursor: "pointer" }} aria-label="Editar">
+                    <Pencil size={14} />
+                  </button>
+                  <button
+                    onClick={() => askConfirm({
+                      title: "Borrar clase",
+                      message: `¿Seguro que querés borrar "${c.title}"? Esta acción no se puede deshacer.`,
+                      confirmLabel: "Borrar",
+                      onConfirm: () => { onDeleteClass(materiaDetail.id, c.id); setConfirmState(null); },
+                    })}
                     style={{ background: "transparent", border: "1px solid #444", color: RED, padding: 8, borderRadius: 4, cursor: "pointer" }}
                     aria-label="Borrar"
                   >
@@ -1557,15 +1722,18 @@ function AdminDashboard({ subjects, onAddClass, onUpdateClass, onDeleteClass, on
         {tab === "alumnos" && (
           <div>
             <h3 style={{ color: "#fff", fontSize: 16, fontWeight: 700, marginBottom: 4 }}>Alumnos registrados ({students.length})</h3>
-            <p style={{ color: TEXT_MUTED, fontSize: 12, marginBottom: 16 }}>Perfiles creados en este navegador.</p>
+            <p style={{ color: TEXT_MUTED, fontSize: 12, marginBottom: 16 }}>Cuentas creadas en este navegador.</p>
             <div style={{ background: CARD_BG, borderRadius: 6, overflow: "hidden" }}>
               {students.length === 0 && <div style={{ padding: 16, color: TEXT_MUTED, fontSize: 13 }}>Todavía no se registró ningún alumno.</div>}
               {students.map((p, i) => (
                 <div key={p.id} style={{ display: "flex", alignItems: "center", gap: 12, padding: "12px 16px", borderTop: i > 0 ? "1px solid #262626" : "none" }}>
                   <div style={{ width: 32, height: 32, borderRadius: 6, background: p.color, display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontWeight: 700, fontSize: 13 }}>
-                    {p.name.charAt(0).toUpperCase()}
+                    {p.username.charAt(0).toUpperCase()}
                   </div>
-                  <div style={{ color: "#fff", fontSize: 14 }}>{p.name}</div>
+                  <div style={{ flex: 1, color: "#fff", fontSize: 14 }}>{p.username}</div>
+                  <div style={{ background: "#2a2a2a", color: TEXT_MUTED, fontSize: 11, fontWeight: 700, padding: "4px 10px", borderRadius: 4, textTransform: "uppercase" }}>
+                    {CYCLES[p.ciclo]?.label || p.ciclo}
+                  </div>
                 </div>
               ))}
             </div>
@@ -1599,6 +1767,7 @@ function AdminDashboard({ subjects, onAddClass, onUpdateClass, onDeleteClass, on
       {subjectForm && (
         <SubjectFormModal
           form={subjectForm}
+          subjects={subjects}
           onClose={() => setSubjectForm(null)}
           onSave={(data) => {
             if (subjectForm.id) onUpdateSubject(subjectForm.id, data);
@@ -1618,6 +1787,17 @@ function AdminDashboard({ subjects, onAddClass, onUpdateClass, onDeleteClass, on
           autoPlay={false}
         />
       )}
+
+      {/* CONFIRMACIÓN estilo Netflix para borrar clases/materias */}
+      {confirmState && (
+        <ConfirmDialog
+          title={confirmState.title}
+          message={confirmState.message}
+          confirmLabel={confirmState.confirmLabel}
+          onConfirm={confirmState.onConfirm}
+          onCancel={() => setConfirmState(null)}
+        />
+      )}
     </div>
   );
 }
@@ -1635,7 +1815,7 @@ function ClassFormModal({ form, subjects, onClose, onSave }) {
     setData((d) => ({ ...d, duration: seconds ? formatDurationFromSeconds(seconds) : d.duration || "—" }));
   };
 
-  const valid = data.subjectId && data.title.trim() && data.prof.trim() && data.desc.trim() && data.videoUrl.trim();
+  const valid = data.subjectId && data.ciclo && data.title.trim() && data.prof.trim() && data.desc.trim() && data.videoUrl.trim();
 
   return (
     <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.75)", zIndex: 950, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }} onClick={onClose}>
@@ -1649,6 +1829,23 @@ function ClassFormModal({ form, subjects, onClose, onSave }) {
         <select value={data.subjectId} onChange={(e) => setData({ ...data, subjectId: e.target.value })} style={adminInputStyle}>
           {subjects.map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}
         </select>
+
+        <label style={adminLabelStyle}>Ciclo *</label>
+        <div style={{ display: "flex", gap: 8 }}>
+          {CYCLE_LIST.map((c) => (
+            <button
+              key={c.key}
+              onClick={() => setData({ ...data, ciclo: c.key })}
+              style={{
+                flex: 1, textAlign: "left", background: data.ciclo === c.key ? "#3a1013" : "#2a2a2a",
+                border: data.ciclo === c.key ? `1px solid ${RED}` : "1px solid #444", borderRadius: 6, padding: "8px 12px", cursor: "pointer",
+              }}
+            >
+              <div style={{ color: "#fff", fontSize: 13, fontWeight: 700 }}>{c.label}</div>
+              <div style={{ color: TEXT_MUTED, fontSize: 11 }}>{c.sublabel}</div>
+            </button>
+          ))}
+        </div>
 
         <label style={adminLabelStyle}>Título de la clase *</label>
         <input value={data.title} onChange={(e) => setData({ ...data, title: e.target.value })} style={adminInputStyle} placeholder="Ej: Ecuaciones lineales" />
@@ -1687,9 +1884,13 @@ function ClassFormModal({ form, subjects, onClose, onSave }) {
   );
 }
 
-function SubjectFormModal({ form, onClose, onSave }) {
+function SubjectFormModal({ form, subjects, onClose, onSave }) {
   const [data, setData] = useState(form);
-  const valid = data.name.trim();
+  const trimmedName = data.name.trim();
+  const isDuplicate = trimmedName.length > 0 && subjects.some(
+    (s) => s.id !== data.id && s.name.trim().toLowerCase() === trimmedName.toLowerCase()
+  );
+  const valid = trimmedName && !isDuplicate;
 
   return (
     <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.75)", zIndex: 950, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }} onClick={onClose}>
@@ -1701,6 +1902,9 @@ function SubjectFormModal({ form, onClose, onSave }) {
 
         <label style={adminLabelStyle}>Nombre *</label>
         <input value={data.name} onChange={(e) => setData({ ...data, name: e.target.value })} style={adminInputStyle} placeholder="Ej: Geografía" />
+        {isDuplicate && (
+          <div style={{ color: RED, fontSize: 12, marginTop: 6 }}>Ya existe una materia con ese nombre.</div>
+        )}
 
         <label style={adminLabelStyle}>Color</label>
         <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
@@ -1742,11 +1946,11 @@ function SubjectFormModal({ form, onClose, onSave }) {
 }
 
 /* ============================================================
-   RAÍZ DE LA APP — intro animada → selección de perfil → app
+   RAÍZ DE LA APP — intro animada → login/registro → app
    ============================================================ */
 export default function ChacaFlix() {
-  const [stage, setStage] = useState("intro"); // "intro" | "profiles" | "adminLogin" | "admin" | "app"
-  const [activeProfile, setActiveProfile] = useState(null);
+  const [stage, setStage] = useState("intro"); // "intro" | "auth" | "adminLogin" | "admin" | "app"
+  const [account, setAccount] = useState(null);
   const [subjects, setSubjects] = useState(() => withIcons(loadSubjectsRaw()));
 
   const updateSubjects = (updater) => {
@@ -1764,19 +1968,19 @@ export default function ChacaFlix() {
   const updateSubject = (id, patch) => updateSubjects((prev) => prev.map((s) => (s.id === id ? { ...s, ...patch, icon: ICONS[patch.iconKey || s.iconKey] || s.icon } : s)));
   const deleteSubject = (id) => updateSubjects((prev) => prev.filter((s) => s.id !== id));
 
-  const handleIntroDone = () => setStage("profiles");
-  const handleProfileSelected = (profile) => {
-    setActiveProfile(profile);
+  const handleIntroDone = () => setStage("auth");
+  const handleAuthenticated = (acc) => {
+    setAccount(acc);
     setStage("app");
   };
-  const handleSwitchProfile = () => {
-    setActiveProfile(null);
-    setStage("profiles");
+  const handleLogout = () => {
+    setAccount(null);
+    setStage("auth");
   };
 
   if (stage === "intro") return <IntroAnimation onDone={handleIntroDone} />;
-  if (stage === "profiles") return <ProfileGate onSelect={handleProfileSelected} onAdminRequest={() => setStage("adminLogin")} />;
-  if (stage === "adminLogin") return <AdminLogin onSuccess={() => setStage("admin")} onCancel={() => setStage("profiles")} />;
+  if (stage === "auth") return <AuthGate onAuthenticated={handleAuthenticated} onAdminRequest={() => setStage("adminLogin")} />;
+  if (stage === "adminLogin") return <AdminLogin onSuccess={() => setStage("admin")} onCancel={() => setStage("auth")} />;
   if (stage === "admin") {
     return (
       <AdminDashboard
@@ -1787,14 +1991,14 @@ export default function ChacaFlix() {
         onAddSubject={addSubject}
         onUpdateSubject={updateSubject}
         onDeleteSubject={deleteSubject}
-        onExit={() => setStage(activeProfile ? "app" : "profiles")}
+        onExit={() => setStage(account ? "app" : "auth")}
       />
     );
   }
   return (
     <BrowseApp
-      profile={activeProfile}
-      onSwitchProfile={handleSwitchProfile}
+      profile={account}
+      onSwitchProfile={handleLogout}
       subjects={subjects}
       onOpenAdmin={() => setStage("adminLogin")}
     />
